@@ -1,0 +1,205 @@
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node next;
+
+    // Constructor to create a new node
+    public Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+class SinglyLinkedList {
+    private Node head;
+
+    // Constructor to initialize the list as empty
+    public SinglyLinkedList() {
+        head = null;
+    }
+
+    // Method to insert at the beginning of the list
+    public void insertAtBeginning(int data) {
+        Node newNode = new Node(data);
+        newNode.next = head;
+        head = newNode;
+        System.out.println("Inserted at the beginning.");
+    }
+
+    // Method to insert at the end of the list
+    public void insertAtEnd(int data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node temp = head;
+            while (temp.next != null) {
+                temp = temp.next;
+            }
+            temp.next = newNode;
+        }
+        System.out.println("Inserted at the end.");
+    }
+
+    // Method to create a list with multiple elements
+    public void createList() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the number of elements to add: ");
+        int n = sc.nextInt();
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter value for element " + (i + 1) + ": ");
+            int value = sc.nextInt();
+            insertAtEnd(value); // Using insertAtEnd to add elements at the end of the list
+        }
+        System.out.println("List created successfully.");
+    }
+
+    // Method to display the list
+    public void display() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+        Node temp = head;
+        System.out.print("List elements: ");
+        while (temp != null) {
+            System.out.print(temp.data + " ");
+            temp = temp.next;
+        }
+        System.out.println();
+    }
+
+    // Method to search for an element in the list
+    public void search(int data) {
+        Node temp = head;
+        int position = 1;
+        while (temp != null) {
+            if (temp.data == data) {
+                System.out.println("Element " + data + " found at position: " + position);
+                return;
+            }
+            temp = temp.next;
+            position++;
+        }
+        System.out.println("Element " + data + " not found.");
+    }
+
+    // Method to count the number of nodes in the list
+    public void countNodes() {
+        int count = 0;
+        Node temp = head;
+        while (temp != null) {
+            count++;
+            temp = temp.next;
+        }
+        System.out.println("Number of nodes in the list: " + count);
+    }
+
+    // Method to reverse the list
+    public void reverse() {
+        Node prev = null;
+        Node current = head;
+        Node next;
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        head = prev;
+        System.out.println("List reversed.");
+    }
+
+    // Method to sort the list using Bubble Sort
+    public void sort() {
+        if (head == null || head.next == null) {
+            System.out.println("The list is empty or has only one element.");
+            return;
+        }
+
+        Node current = head;
+        Node index = null;
+        int temp;
+        while (current != null) {
+            index = current.next;
+            while (index != null) {
+                if (current.data > index.data) {
+                    temp = current.data;
+                    current.data = index.data;
+                    index.data = temp;
+                }
+                index = index.next;
+            }
+            current = current.next;
+        }
+        System.out.println("List sorted.");
+    }
+}
+
+public class pratical9 {
+    public static void main(String[] args) {
+        SinglyLinkedList list = new SinglyLinkedList();
+        Scanner sc = new Scanner(System.in);
+        int choice, value;
+
+        do {
+            System.out.println("\n*** Operations on Singly Linked List ***");
+            System.out.println("1. Create List");
+            System.out.println("2. Insert at Beginning");
+            System.out.println("3. Insert at End");
+            System.out.println("4. Display List");
+            System.out.println("5. Search Element");
+            System.out.println("6. Count Nodes");
+            System.out.println("7. Reverse List");
+            System.out.println("8. Sort List");
+            System.out.println("9. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    list.createList();
+                    break;
+                case 2:
+                    System.out.print("Enter value to insert at beginning: ");
+                    value = sc.nextInt();
+                    list.insertAtBeginning(value);
+                    break;
+                case 3:
+                    System.out.print("Enter value to insert at end: ");
+                    value = sc.nextInt();
+                    list.insertAtEnd(value);
+                    break;
+                case 4:
+                    list.display();
+                    break;
+                case 5:
+                    System.out.print("Enter value to search: ");
+                    value = sc.nextInt();
+                    list.search(value);
+                    break;
+                case 6:
+                    list.countNodes();
+                    break;
+                case 7:
+                    list.reverse();
+                    list.display();
+                    break;
+                case 8:
+                    list.sort();
+                    list.display();
+                    break;
+                case 9:
+                    System.out.println("Exiting.");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        } while (choice != 9);
+
+        sc.close();
+    }
+}
+

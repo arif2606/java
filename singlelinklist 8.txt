@@ -1,0 +1,164 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/**
+ *
+ * @author Satya
+ */
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node link;
+
+    public Node(int data) {
+        this.data = data;
+        this.link = null;
+    }
+}
+
+class LinkList {
+    private Node start;
+
+    // Constructor to initialize an empty list
+    public LinkList() {
+        this.start = null;
+    }
+
+    // Create the list with multiple nodes
+    public void createList() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of elements: ");
+        int n = scanner.nextInt();
+
+        // Add n elements to the list
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter the element to add: ");
+            int data = scanner.nextInt();
+            insertLast(data);  // Insert at the end
+        }
+    }
+
+    // Display the list
+    public void display() {
+        if (start == null) {
+            System.out.println("The list is empty.");
+            return;
+        }
+        System.out.print("List elements: ");
+        Node temp = start;
+        while (temp != null) {
+            System.out.print(temp.data + " ");
+            temp = temp.link;
+        }
+        System.out.println();
+    }
+
+    // Insert a node at the beginning
+    public void insertBegin(int data) {
+        Node newNode = new Node(data);
+        newNode.link = start;  // Link the new node to the current start
+        start = newNode;       // Make the new node the start of the list
+        System.out.println("Inserted node at the beginning.");
+    }
+
+    // Insert a node at the end
+    public void insertLast(int data) {
+        Node newNode = new Node(data);
+        if (start == null) {
+            start = newNode;  // If list is empty, make the new node the start
+        } else {
+            Node temp = start;
+            while (temp.link != null) {  // Traverse to the last node
+                temp = temp.link;
+            }
+            temp.link = newNode;  // Link the new node to the last node
+        }
+        System.out.println("Inserted node at the end.");
+    }
+
+    // Delete the first node
+    public void deleteBegin() {
+        if (start == null) {
+            System.out.println("The list is empty.");
+        } else {
+            start = start.link;  // Move the start pointer to the next node
+            System.out.println("Deleted node from the beginning.");
+        }
+    }
+
+    // Delete the last node
+    public void deleteEnd() {
+        if (start == null) {
+            System.out.println("The list is empty.");
+        } else if (start.link == null) {  // If only one node exists
+            start = null;
+            System.out.println("Deleted the last element.");
+        } else {
+            Node temp = start;
+            while (temp.link.link != null) {  // Traverse to the second-last node
+                temp = temp.link;
+            }
+            temp.link = null;  // Remove the link to the last node
+            System.out.println("Deleted node from the end.");
+        }
+    }
+}
+
+public class SinglyLinkedList {
+    public static void main(String[] args) {
+        LinkList list = new LinkList();
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            // Menu options for linked list operations
+            System.out.println("\n*** Operations on Singly Linked List ***");
+            System.out.println("1. Create List");
+            System.out.println("2. Insert at Beginning");
+            System.out.println("3. Insert at End");
+            System.out.println("4. Delete from Beginning");
+            System.out.println("5. Delete from End");
+            System.out.println("6. Display List");
+            System.out.println("7. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            // Perform the operation based on user choice
+            switch (choice) {
+                case 1:
+                    list.createList();
+                    break;
+                case 2:
+                    System.out.print("Enter value to insert at beginning: ");
+                    int value1 = scanner.nextInt();
+                    list.insertBegin(value1);
+                    break;
+                case 3:
+                    System.out.print("Enter value to insert at end: ");
+                    int value2 = scanner.nextInt();
+                    list.insertLast(value2);
+                    break;
+                case 4:
+                    list.deleteBegin();
+                    break;
+                case 5:
+                    list.deleteEnd();
+                    break;
+                case 6:
+                    list.display();
+                    break;
+                case 7:
+                    System.out.println("Exiting.");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        } while (choice != 7);  // Continue until user selects exit
+
+        scanner.close();  // Close the scanner
+    }
+}
+
