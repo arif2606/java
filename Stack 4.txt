@@ -1,0 +1,130 @@
+import java.util.Scanner;  // Import the Scanner class to read user input
+
+public class Stack {
+    public int[] stackArray; // Array to store stack elements
+    public int top; // Top of the stack, points to the index of the top element
+    public int maxSize; // Maximum size of the stack, to limit the number of elements
+
+    // Constructor to initialize the stack
+    public Stack(int size) {
+        maxSize = size;  // Set the maximum size of the stack
+        stackArray = new int[maxSize];  // Create an array of the given size to store stack elements
+        top = -1;  // Initialize top to -1, indicating that the stack is empty
+    }
+
+    // Method to add an element to the stack
+    public void push(int value) {
+        if (isFull()) {  // Check if the stack is full
+            System.out.println("Stack is full. Unable to push " + value);  // Print a message if stack is full
+        } else {
+            stackArray[++top] = value;  // Increment the top and add the value to the stack
+            System.out.println(value + " pushed to stack.");  // Print confirmation of the push operation
+        }
+    }
+
+    // Method to remove and return the top element of the stack
+    public int pop() {
+        if (isEmpty()) {  // Check if the stack is empty
+            System.out.println("Stack is empty. Unable to pop.");  // Print a message if stack is empty
+            return -1;  // Return -1 to indicate an unsuccessful pop operation
+        } else {
+            int poppedValue = stackArray[top--];  // Retrieve and remove the top element, then decrement the top pointer
+            System.out.println(poppedValue + " popped from stack.");  // Print confirmation of the pop operation
+            return poppedValue;  // Return the popped element
+        }
+    }
+
+    // Method to return the top element without removing it
+    public int peek() {
+        if (isEmpty()) {  // Check if the stack is empty
+            System.out.println("Stack is empty.");  // Print a message if stack is empty
+            return -1;  // Return -1 to indicate no top element is available
+        } else {
+            return stackArray[top];  // Return the element at the top without removing it
+        }
+    }
+
+    // Method to check if the stack is empty
+    public boolean isEmpty() {
+        return (top == -1);  // The stack is empty if top is -1
+    }
+
+    // Method to check if the stack is full
+    public boolean isFull() {
+        return (top == maxSize - 1);  // The stack is full if top is at the last index (maxSize - 1)
+    }
+
+    // Method to display stack elements
+    public void display() {
+        if (isEmpty()) {  // Check if the stack is empty
+            System.out.println("Stack is empty.");  // Print a message if stack is empty
+        } else {
+            System.out.println("Stack elements:");  // Print heading for stack elements
+            for (int i = 0; i <= top; i++) {  // Loop through all elements from index 0 to top
+                System.out.print(stackArray[i] + " ");  // Print each element in the stack
+            }
+            System.out.println();  // Print a newline at the end
+        }
+    }
+
+    // Main method to drive the stack operations
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);  // Initialize scanner to take user input
+        System.out.print("Enter the size of the stack: ");  // Ask user to enter the size of the stack
+        int size = scanner.nextInt();  // Read the stack size input by the user
+        Stack stack = new Stack(size);  // Create a stack object with the user-specified size
+
+        int choice;  // Variable to store user's choice for stack operations
+        do {
+            // Display the menu of operations for the user to choose from
+            System.out.println("\nStack Operations Menu:");
+            System.out.println("1. Push");
+            System.out.println("2. Pop");
+            System.out.println("3. Peek");
+            System.out.println("4. Display");
+            System.out.println("5. Exit");
+
+            System.out.print("Enter your choice: ");  // Prompt the user to choose an operation
+            choice = scanner.nextInt();  // Read the user's choice
+
+            // Use a switch statement to perform the chosen operation
+            switch (choice) {
+                case 1:
+                    // If the user chooses to push, ask for the value to be pushed
+                    System.out.print("Enter value to push: ");
+                    int value = scanner.nextInt();  // Read the value to push
+                    stack.push(value);  // Call the push method to add the value to the stack
+                    break;
+
+                case 2:
+                    // If the user chooses to pop, perform the pop operation
+                    stack.pop();  // Call the pop method to remove and return the top element
+                    break;
+
+                case 3:
+                    // If the user chooses to peek, get the top element without removing it
+                    int topElement = stack.peek();  // Call the peek method to get the top element
+                    if (topElement != -1) {
+                        System.out.println("Top element is: " + topElement);  // Print the top element
+                    }
+                    break;
+
+                case 4:
+                    // If the user chooses to display, show the current elements of the stack
+                    stack.display();  // Call the display method to print stack elements
+                    break;
+
+                case 5:
+                    // If the user chooses to exit, print a message and exit the loop
+                    System.out.println("Exiting...");
+                    break;
+
+                default:
+                    // If the user enters an invalid choice, print an error message
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 5);  // Keep running the menu until the user chooses to exit (choice 5)
+        
+        scanner.close();  // Close the scanner to release the resources
+    }
+}
