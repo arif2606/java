@@ -1,0 +1,175 @@
+import java.util.Scanner;
+
+//Node class represents a single node in the doubly linked list
+class Node {
+ int data;   // Data held by the node
+ Node prev;  // Pointer to the previous node in the list
+ Node next;  // Pointer to the next node in the list
+
+ // Constructor to initialize a new node with the given data
+ public Node(int data) {
+     this.data = data;
+     this.prev = null;  // Initially, previous pointer is null
+     this.next = null;  // Initially, next pointer is null
+ }
+}
+
+//DoublyLinkedList class represents the doubly linked list and its operations
+class DoublyLinkedList {
+ private Node head; // Points to the first node of the list
+ private Node tail; // Points to the last node of the list
+
+ // Method to create a new node and add it to the end of the list
+ public void create(int data) {
+     Node newNode = new Node(data);  // Create a new node with the given data
+     if (head == null) {  // If the list is empty
+         head = tail = newNode;  // Both head and tail will point to the new node
+     } else {
+         tail.next = newNode;  // The next of tail points to the new node
+         newNode.prev = tail;  // The previous of the new node points to the old tail
+         tail = newNode;       // Update the tail to point to the new node
+     }
+     System.out.println(data + " added to the list.");
+ }
+
+ // Method to display all elements of the doubly linked list
+ public void display() {
+     if (head == null) {  // If the list is empty
+         System.out.println("The list is empty.");
+         return;
+     }
+     Node temp = head;  // Start from the head of the list
+     System.out.print("List elements: ");
+     while (temp != null) {  // Traverse until the end of the list
+         System.out.print(temp.data + " ");  // Print the data of the current node
+         temp = temp.next;  // Move to the next node
+     }
+     System.out.println();
+ }
+
+ // Method to insert a node at a specific position in the list
+ public void insert(int data, int position) {
+     Node newNode = new Node(data);  // Create a new node with the given data
+     if (position == 1) {  // If we want to insert at the beginning
+         newNode.next = head;  // The next of the new node points to the current head
+         if (head != null) {
+             head.prev = newNode;  // The previous of the head points to the new node
+         }
+         head = newNode;  // Update the head to point to the new node
+         if (tail == null) {  // If the list was empty before insertion
+             tail = newNode;  // Set the new node as the tail
+         }
+         System.out.println(data + " inserted at the beginning.");
+     } else {  // Insert at a specific position or at the end
+         Node temp = head;  // Start from the head of the list
+         int count = 1;  // Initialize the count to 1
+         while (temp != null && count < position - 1) {  // Traverse the list until the (position-1)th node
+             temp = temp.next;
+             count++;
+         }
+         if (temp == null) {  // If the position is out of bounds
+             System.out.println("Position out of bounds.");
+         } else {
+             newNode.next = temp.next;  // The next of the new node points to the next of the temp node
+             newNode.prev = temp;       // The previous of the new node points to the temp node
+             if (temp.next != null) {   // If the temp node is not the last node
+                 temp.next.prev = newNode;  // The previous of the next node points to the new node
+             } else {
+                 tail = newNode;  // If temp is the last node, update tail to point to the new node
+             }
+             temp.next = newNode;  // The next of temp points to the new node
+             System.out.println(data + " inserted at position " + position + ".");
+         }
+     }
+ }
+
+ // Method to delete a node at a specific position in the list
+ public void delete(int position) {
+     if (head == null) {  // If the list is empty
+         System.out.println("The list is empty.");
+         return;
+     }
+     if (position == 1) {  // If we want to delete the first node
+         System.out.println("Deleted element: " + head.data);
+         head = head.next;  // Move the head to the next node
+         if (head != null) {
+             head.prev = null;  // Set the previous of the new head to null
+         } else {
+             tail = null;  // If the list becomes empty, set tail to null
+         }
+     } else {  // Delete a node at a specific position
+         Node temp = head;  // Start from the head of the list
+         int count = 1;  // Initialize the count to 1
+         while (temp != null && count < position) {  // Traverse until the desired position
+             temp = temp.next;
+             count++;
+         }
+         if (temp == null) {  // If the position is out of bounds
+             System.out.println("Position out of bounds.");
+         } else {
+             System.out.println("Deleted element: " + temp.data);
+             if (temp.next != null) {  // If the node is not the last node
+                 temp.next.prev = temp.prev;  // The previous of the next node points to the previous node
+             } else {
+                 tail = temp.prev;  // If the node is the last node, update tail to the previous node
+             }
+             if (temp.prev != null) {  // If the node is not the first node
+                 temp.prev.next = temp.next;  // The next of the previous node points to the next node
+             }
+         }
+     }
+ }
+}
+
+//Main class to demonstrate the doubly linked list operations
+public class DoublyLinkedListDemo {
+ public static void main(String[] args) {
+     Scanner scanner = new Scanner(System.in);  // Scanner object to take input from the user
+     DoublyLinkedList list = new DoublyLinkedList();  // Create a new doubly linked list
+     int choice;  // Variable to store the user's choice
+     System.out.println("***** Doubly Linked List Operations *****");
+     
+     // Menu to perform operations on the doubly linked list
+     do {
+         System.out.println("\n1: Create\n2: Insert\n3: Display\n4: Delete\n5: Exit");
+         System.out.print("Enter your choice: ");
+         choice = scanner.nextInt();  // Get the user's choice
+
+         // Switch case to perform the selected operation
+         switch (choice) {
+             case 1:  // Create operation
+                 System.out.print("Enter data to add to the list: ");
+                 int data = scanner.nextInt();  // Get data to add to the list
+                 list.create(data);  // Call the create method to add the data to the list
+                 break;
+
+             case 2:  // Insert operation
+                 System.out.print("Enter data to insert: ");
+                 data = scanner.nextInt();  // Get data to insert
+                 System.out.print("Enter position to insert at (1 for beginning): ");
+                 int position = scanner.nextInt();  // Get position to insert at
+                 list.insert(data, position);  // Call the insert method
+                 break;
+
+             case 3:  // Display operation
+                 list.display();  // Call the display method to show the list
+                 break;
+
+             case 4:  // Delete operation
+                 System.out.print("Enter position to delete from: ");
+                 position = scanner.nextInt();  // Get the position to delete from
+                 list.delete(position);  // Call the delete method
+                 break;
+
+             case 5:  // Exit operation
+                 System.out.println("Exiting...");  // Print exit message
+                 break;
+
+             default:  // Invalid choice
+                 System.out.println("Invalid choice. Try again.");
+                 break;
+         }
+     } while (choice != 5);  // Continue looping until the user chooses to exit
+     scanner.close();  // Close the scanner to free up resources
+ }
+}
