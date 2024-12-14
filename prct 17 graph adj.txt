@@ -1,0 +1,69 @@
+import java.util.*;
+
+public class Graph {
+    // Maximum number of vertices allowed in the graph
+    private static final int MAX_VERTICES = 20;
+    // Adjacency matrix to represent the graph
+    private final int[][] adjacencyMatrix;
+    // Count of vertices in the graph
+    private int vertexCount;
+
+    // Constructor to initialize the graph with a given number of vertices
+    public Graph(int vertices) {
+        vertexCount = vertices;
+        // Initialize the adjacency matrix with all elements set to 0
+        adjacencyMatrix = new int[MAX_VERTICES][MAX_VERTICES];
+        
+        // Loop to initialize all cells in the matrix to 0 (no edges initially)
+        for (int i = 0; i < MAX_VERTICES; i++) {
+            for (int j = 0; j < MAX_VERTICES; j++) {
+                adjacencyMatrix[i][j] = 0;
+            }
+        }
+    }
+
+    // Function to add an edge between two vertices (u and v)
+    public void addEdge(int u, int v) {
+        // Check if the vertices are within valid bounds
+        if (u >= vertexCount || v >= vertexCount || u < 0 || v < 0) {
+            System.out.println("Invalid edge!");
+        } else {
+            // Set adjacency matrix values to 1 to indicate an edge between u and v
+            adjacencyMatrix[u][v] = 1;
+            adjacencyMatrix[v][u] = 1; // For undirected graph, the edge is bidirectional
+        }
+    }
+
+    // Function to display the adjacency matrix of the graph
+    public void displayMatrix() {
+        // Loop through each row and column of the matrix and print the values
+        for (int i = 0; i < vertexCount; i++) {
+            for (int j = 0; j < vertexCount; j++) {
+                System.out.print(adjacencyMatrix[i][j] + " "); // Print each element in the matrix
+            }
+            System.out.println(); // Move to the next line after printing one row
+        }
+    }
+
+    // Main function to test the Graph implementation
+    public static void main(String[] args) {
+        // Define the number of vertices in the graph
+        int vertices = 6; // Example graph with 6 vertices
+        // Create a new graph with the specified number of vertices
+        Graph graph = new Graph(vertices);
+        
+        // Adding edges to the graph
+        graph.addEdge(0, 4); // Edge between vertex 0 and vertex 4
+        graph.addEdge(0, 3); // Edge between vertex 0 and vertex 3
+        graph.addEdge(1, 2); // Edge between vertex 1 and vertex 2
+        graph.addEdge(1, 4); // Edge between vertex 1 and vertex 4
+        graph.addEdge(1, 5); // Edge between vertex 1 and vertex 5
+        graph.addEdge(2, 3); // Edge between vertex 2 and vertex 3
+        graph.addEdge(2, 5); // Edge between vertex 2 and vertex 5
+        graph.addEdge(5, 3); // Edge between vertex 5 and vertex 3
+        graph.addEdge(5, 4); // Edge between vertex 5 and vertex 4
+
+        // Display the adjacency matrix to see the graph's structure
+        graph.displayMatrix();
+    }
+}
