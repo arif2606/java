@@ -1,0 +1,220 @@
+// prct 5 a 
+import java.util.Stack;  // Import the Stack class from the Java utility library
+
+public class InfixToPostfix {
+
+    // Method to check if a character is an operator
+    private static boolean isOperator(char ch) {
+        // Check if the character is one of the operators: +, -, *, /, or ^
+        return (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^');
+    }
+
+    // Method to check precedence of operators
+    private static int precedence(char ch) {
+        // Return precedence of operators, higher number means higher precedence
+        switch (ch) {
+            case '+':
+            case '-':
+                return 1;  // + and - have lowest precedence
+            case '*':
+            case '/':
+                return 2;  // * and / have higher precedence than + and -
+            case '^':
+                return 3;  // ^ has highest precedence
+        }
+        return -1;  // Return -1 for invalid character
+    }
+
+    // Method to convert infix expression to postfix expression
+    public static String infixToPostfix(String expression) {
+        StringBuilder result = new StringBuilder();  // Resulting postfix expression (as StringBuilder)
+        Stack<Character> stack = new Stack<>();  // Stack to hold operators and parentheses
+
+        // Loop through each character in the infix expression
+        for (int i = 0; i < expression.length(); i++) {
+            char ch = expression.charAt(i);  // Get current character
+
+            // If the character is an operand (letter or digit), append it to the result
+            if (Character.isLetterOrDigit(ch)) {
+                result.append(ch);
+            }
+            // If the character is '(', push it to the stack
+            else if (ch == '(') {
+                stack.push(ch);
+            }
+            // If the character is ')', pop until '(' is found
+            else if (ch == ')') {
+                // Pop operators from stack and append them to the result until '(' is encountered
+                while (!stack.isEmpty() && stack.peek() != '(') {
+                    result.append(stack.pop());
+                }
+                // Remove '(' from the stack (no need to append to result)
+                if (!stack.isEmpty() && stack.peek() == '(') {
+                    stack.pop();
+                }
+            }
+            // If the character is an operator, process it
+            else if (isOperator(ch)) {
+                // Pop operators from the stack with higher or equal precedence and append to result
+                while (!stack.isEmpty() && precedence(ch) <= precedence(stack.peek())) {
+                    result.append(stack.pop());
+                }
+                // Push the current operator to the stack
+                stack.push(ch);
+            }
+        }
+
+        // Pop the remaining operators from the stack and append to the result
+        while (!stack.isEmpty()) {
+            result.append(stack.pop());
+        }
+
+        // Return the resulting postfix expression as a string
+        return result.toString();
+    }
+
+    // Main method to test the conversion
+    public static void main(String[] args) {
+        String infixExpression = "A+B*(C^D-E)";  // Example infix expression
+        System.out.println("Infix Expression: " + infixExpression);  // Print the original infix expression
+
+        // Convert the infix expression to postfix
+        String postfixExpression = infixToPostfix(infixExpression);
+        System.out.println("Postfix Expression: " + postfixExpression);  // Print the resulting postfix expression
+    }
+}
+
+
+//prct 5b 
+import java.util.Stack;  // Import the Stack class from Java's utility library
+
+public class PostfixEvaluation {
+    // Method to evaluate the value of a postfix expression
+    public static int evaluatePostfix(String expression) {
+        // Create a stack to store operands (numbers)
+        Stack<Integer> stack = new Stack<>();
+
+        // Scan the expression from left to right
+        for (int i = 0; i < expression.length(); i++) {
+            // Get the current character in the expression
+            char ch = expression.charAt(i);
+
+            // If the character is a digit (operand), push it to the stack
+            if (Character.isDigit(ch)) {
+                stack.push(ch - '0');  // Convert char digit to integer (ASCII value trick)
+            }
+            // If the character is an operator, perform the operation
+            else {
+                // Pop the two operands from the stack for operation
+                int operand2 = stack.pop();  // Second operand (top of the stack)
+                int operand1 = stack.pop();  // First operand (next element in the stack)
+
+                // Switch case for handling different operators
+                switch (ch) {
+                    case '+':  // Addition operation
+                        stack.push(operand1 + operand2);  // Push result back to stack
+                        break;
+                    case '-':  // Subtraction operation
+                        stack.push(operand1 - operand2);  // Push result back to stack
+                        break;
+                    case '*':  // Multiplication operation
+                        stack.push(operand1 * operand2);  // Push result back to stack
+                        break;
+                    case '/':  // Division operation
+                        stack.push(operand1 / operand2);  // Push result back to stack
+                        break;
+                    case '^':  // Exponentiation operation (power)
+                        stack.push((int) Math.pow(operand1, operand2));  // Push result back to stack
+                        break;
+                    default:
+                        // If an invalid operator is encountered, print an error and return -1
+                        System.out.println("Invalid operator encountered: " + ch);
+                        return -1;
+                }
+            }
+        }
+        
+        // The result will be the only value left in the stack, so pop and return it
+        return stack.pop();
+    }
+
+    // Main method to test postfix evaluation
+    public static void main(String[] args) {
+        // Example postfix expression
+        String postfixExpression = "53+82-*";  // A sample postfix expression
+        System.out.println("Postfix Expression: " + postfixExpression);
+
+        // Call the evaluatePostfix method to evaluate the postfix expression
+        int result = evaluatePostfix(postfixExpression);
+
+        // Print the result of the evaluation
+        System.out.println("Result of evaluation: " + result);
+    }
+}
+
+
+// prct 5 c
+import java.util.Stack;  // Import Stack class from Java's utility library
+
+public class BalancedParentheses {
+
+    // Method to check if the given character is an opening bracket
+    private static boolean isOpeningBracket(char ch) {
+        // Checks if the character is one of the opening brackets: '(', '{', or '['
+        return (ch == '(' || ch == '{' || ch == '[');
+    }
+
+    // Method to check if the given character is a closing bracket
+    private static boolean isClosingBracket(char ch) {
+        // Checks if the character is one of the closing brackets: ')', '}', or ']'
+        return (ch == ')' || ch == '}' || ch == ']');
+    }
+
+    // Method to check if two brackets form a matching pair
+    private static boolean isMatchingPair(char open, char close) {
+        // Checks if the opening bracket matches the closing bracket
+        return (open == '(' && close == ')') ||
+               (open == '{' && close == '}') ||
+               (open == '[' && close == ']');
+    }
+
+    // Method to check if the parentheses in the expression are balanced
+    public static boolean areParenthesesBalanced(String expression) {
+        // Create a stack to store opening brackets
+        Stack<Character> stack = new Stack<>();
+        
+        // Loop through each character of the expression
+        for (int i = 0; i < expression.length(); i++) {
+            char ch = expression.charAt(i);  // Get the current character from the expression
+
+            // If the character is an opening bracket, push it onto the stack
+            if (isOpeningBracket(ch)) {
+                stack.push(ch);
+            }
+            // If the character is a closing bracket, check if it matches the top of the stack
+            else if (isClosingBracket(ch)) {
+                // If the stack is empty or the top element doesn't form a matching pair, return false
+                if (stack.isEmpty() || !isMatchingPair(stack.pop(), ch)) {
+                    return false;  // Unbalanced expression
+                }
+            }
+        }
+        
+        // If the stack is empty after processing all characters, the expression is balanced
+        return stack.isEmpty();  // If stack is empty, all brackets matched correctly
+    }
+
+    // Main method to test balanced parentheses checking
+    public static void main(String[] args) {
+        // Test cases for checking balanced parentheses
+        String expression1 = "{[()]}";  // Balanced expression
+        String expression2 = "{[(])}";  // Unbalanced expression
+
+        // Print the test expression and whether it is balanced or not
+        System.out.println("Expression: " + expression1);
+        System.out.println("Balanced: " + areParenthesesBalanced(expression1));  // Output: true
+
+        System.out.println("\nExpression: " + expression2);
+        System.out.println("Balanced: " + areParenthesesBalanced(expression2));  // Output: false
+    }
+}
