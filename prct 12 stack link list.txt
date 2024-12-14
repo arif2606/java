@@ -1,0 +1,146 @@
+import java.util.Scanner;
+
+//Class to implement a stack using a linked list
+class StackusingLinkedList {
+ // Node class represents each element of the stack
+ static class Node {
+     int data;  // Data to store the value of the node
+     Node next; // Pointer to the next node in the stack
+
+     // Constructor to create a new node
+     public Node(int data) {
+         this.data = data;  // Set the data for the node
+         this.next = null;   // Initially, next is null because it's the only node
+     }
+ }
+
+ // Stack class that contains linked list methods to operate on the stack
+ static class Stack {
+     Node top;  // Pointer to the top of the stack (the first element)
+
+     // Constructor to initialize the stack as empty
+     public Stack() {
+         top = null;  // Initially, the stack is empty, so top is null
+     }
+
+     // Push method to add an element to the stack
+     public void push(int data) {
+         Node newNode = new Node(data);  // Create a new node with the given data
+         if (top == null) {  // If the stack is empty (top is null)
+             top = newNode;  // The new node becomes the top of the stack
+         } else {
+             newNode.next = top;  // The next of the new node points to the current top
+             top = newNode;       // The top of the stack is updated to point to the new node
+         }
+         System.out.println(data + " pushed to the stack.");
+     }
+
+     // Pop method to remove the top element from the stack
+     public int pop() {
+         if (top == null) {  // If the stack is empty, there is nothing to pop
+             System.out.println("Stack is empty, cannot pop.");
+             return -1;  // Return -1 to indicate that the pop operation cannot be performed
+         }
+         int poppedValue = top.data;  // Store the value of the top node
+         top = top.next;  // Move the top to the next element in the stack
+         return poppedValue;  // Return the popped value
+     }
+
+     // Peek method to view the top element without removing it
+     public int peek() {
+         if (top == null) {  // If the stack is empty, there is no top element to peek at
+             System.out.println("Stack is empty, cannot peek.");
+             return -1;  // Return -1 to indicate that the peek operation cannot be performed
+         }
+         return top.data;  // Return the data of the top node
+     }
+
+     // Method to check if the stack is empty
+     public boolean isEmpty() {
+         return top == null;  // If top is null, the stack is empty
+     }
+
+     // Method to display all elements of the stack
+     public void display() {
+         if (top == null) {  // If the stack is empty, there is nothing to display
+             System.out.println("Stack is empty.");
+             return;
+         }
+         Node temp = top;  // Start from the top of the stack
+         System.out.print("Stack: ");
+         while (temp != null) {  // Traverse the stack until we reach the last node
+             System.out.print(temp.data + " ");  // Print the data of each node
+             temp = temp.next;  // Move to the next node
+         }
+         System.out.println();  // Print a newline after displaying all the elements
+     }
+ }
+
+ // Main class where the program starts, providing menu options to the user
+ public static void main(String[] args) {
+     Scanner scanner = new Scanner(System.in);  // Scanner object to take user input
+     Stack stack = new Stack();  // Create a new stack instance
+     int choice;  // Variable to store the user's choice
+
+     // Infinite loop to keep showing the menu until the user chooses to exit
+     while (true) {
+         // Display the menu to the user
+         System.out.println("\n*** Stack Operations ***");
+         System.out.println("1. Push");
+         System.out.println("2. Pop");
+         System.out.println("3. Peek");
+         System.out.println("4. Display");
+         System.out.println("5. Check if Empty");
+         System.out.println("6. Exit");
+         System.out.print("Enter your choice: ");
+         choice = scanner.nextInt();  // Take the user's choice as input
+
+         // Perform the corresponding operation based on the user's choice
+         switch (choice) {
+             case 1:  // Push operation
+                 // Ask the user to enter the value to push onto the stack
+                 System.out.print("Enter value to push: ");
+                 int pushValue = scanner.nextInt();  // Take the value as input
+                 stack.push(pushValue);  // Call the push method to add the value to the stack
+                 break;
+
+             case 2:  // Pop operation
+                 // Call the pop method to remove the top element from the stack
+                 int poppedValue = stack.pop();
+                 if (poppedValue != -1) {  // If the pop operation was successful (not an empty stack)
+                     System.out.println("Popped value: " + poppedValue);  // Print the popped value
+                 }
+                 break;
+
+             case 3:  // Peek operation
+                 // Call the peek method to view the top element without removing it
+                 int topValue = stack.peek();
+                 if (topValue != -1) {  // If the peek operation was successful (not an empty stack)
+                     System.out.println("Top value: " + topValue);  // Print the top value
+                 }
+                 break;
+
+             case 4:  // Display stack operation
+                 stack.display();  // Call the display method to show all elements in the stack
+                 break;
+
+             case 5:  // Check if the stack is empty operation
+                 // Call the isEmpty method to check if the stack is empty
+                 if (stack.isEmpty()) {
+                     System.out.println("Stack is empty.");  // If the stack is empty, print the message
+                 } else {
+                     System.out.println("Stack is not empty.");  // If the stack is not empty, print the message
+                 }
+                 break;
+
+             case 6:  // Exit operation
+                 System.out.println("Exiting...");  // Print an exit message
+                 scanner.close();  // Close the scanner object to free up resources
+                 return;  // Exit the program
+
+             default:  // Invalid choice
+                 System.out.println("Invalid choice, please try again.");  // Print an error message
+         }
+     }
+ }
+}
