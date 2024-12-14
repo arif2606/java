@@ -469,3 +469,208 @@ class PriorityQueueusingLinkedList {
         }
     }
 }
+
+//prct 13 d
+
+
+import java.util.Scanner;
+
+class Deque {
+    // Node class representing an element in the deque
+    static class Node {
+        int data;  // Data to be stored in the node
+        Node prev; // Pointer to the previous node
+        Node next; // Pointer to the next node
+        
+        // Constructor to create a new node with a given data value
+        public Node(int data) {
+            this.data = data; // Set the data
+            this.prev = null;  // Initially, there is no previous node
+            this.next = null;  // Initially, there is no next node
+        }
+    }
+
+    // Pointers to the front and rear of the deque
+    private Node front;
+    private Node rear;
+
+    // Constructor to initialize an empty deque
+    public Deque() {
+        front = null; // Initially, the deque is empty, so front is null
+        rear = null;  // Initially, the deque is empty, so rear is null
+    }
+
+    // Method to insert an element at the front of the deque
+    public void insertFront(int data) {
+        Node newNode = new Node(data); // Create a new node with the given data
+        if (front == null) { // Check if the deque is empty
+            front = rear = newNode; // If empty, both front and rear point to the new node
+        } else {
+            newNode.next = front; // Link the new node to the current front node
+            front.prev = newNode; // Set the new node as the previous node of the current front
+            front = newNode; // Update front to the new node
+        }
+        System.out.println("Inserted " + data + " at the front."); // Print the insertion message
+    }
+
+    // Method to insert an element at the rear of the deque
+    public void insertRear(int data) {
+        Node newNode = new Node(data); // Create a new node with the given data
+        if (rear == null) { // Check if the deque is empty
+            front = rear = newNode; // If empty, both front and rear point to the new node
+        } else {
+            newNode.prev = rear; // Link the new node to the current rear node
+            rear.next = newNode; // Set the new node as the next node of the current rear
+            rear = newNode; // Update rear to the new node
+        }
+        System.out.println("Inserted " + data + " at the rear."); // Print the insertion message
+    }
+
+    // Method to delete an element from the front of the deque
+    public void deleteFront() {
+        if (front == null) { // Check if the deque is empty
+            System.out.println("Deque is empty."); // If empty, print message and return
+            return;
+        }
+        int deletedValue = front.data; // Store the value of the front element
+        if (front == rear) { // If there is only one element in the deque
+            front = rear = null; // Set both front and rear to null, as the deque is now empty
+        } else {
+            front = front.next; // Move the front pointer to the next node
+            front.prev = null; // Set the previous pointer of the new front to null
+        }
+        System.out.println("Deleted " + deletedValue + " from the front."); // Print the deletion message
+    }
+
+    // Method to delete an element from the rear of the deque
+    public void deleteRear() {
+        if (rear == null) { // Check if the deque is empty
+            System.out.println("Deque is empty."); // If empty, print message and return
+            return;
+        }
+        int deletedValue = rear.data; // Store the value of the rear element
+        if (front == rear) { // If there is only one element in the deque
+            front = rear = null; // Set both front and rear to null, as the deque is now empty
+        } else {
+            rear = rear.prev; // Move the rear pointer to the previous node
+            rear.next = null; // Set the next pointer of the new rear to null
+        }
+        System.out.println("Deleted " + deletedValue + " from the rear."); // Print the deletion message
+    }
+
+    // Method to peek at the front element of the deque
+    public void peekFront() {
+        if (front == null) { // Check if the deque is empty
+            System.out.println("Deque is empty."); // If empty, print message and return
+            return;
+        }
+        System.out.println("Front element is: " + front.data); // Print the data of the front element
+    }
+
+    // Method to peek at the rear element of the deque
+    public void peekRear() {
+        if (rear == null) { // Check if the deque is empty
+            System.out.println("Deque is empty."); // If empty, print message and return
+            return;
+        }
+        System.out.println("Rear element is: " + rear.data); // Print the data of the rear element
+    }
+
+    // Method to display all elements in the deque
+    public void display() {
+        if (front == null) { // Check if the deque is empty
+            System.out.println("Deque is empty."); // If empty, print message and return
+            return;
+        }
+        Node temp = front; // Start from the front of the deque
+        System.out.print("Deque elements: ");
+        while (temp != null) { // Traverse through the deque
+            System.out.print(temp.data + " "); // Print the data of each node
+            temp = temp.next; // Move to the next node
+        }
+        System.out.println(); // Print a new line after displaying the elements
+    }
+
+    // Method to check if the deque is empty
+    public boolean isEmpty() {
+        return front == null; // Return true if front is null (deque is empty)
+    }
+}
+
+public class DoubleEndedQueue {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in); // Create a scanner object for user input
+        Deque deque = new Deque(); // Create a new deque instance
+        int choice; // Variable to store user's choice
+
+        // Menu-driven interface for deque operations
+        while (true) {
+            // Display the menu with options
+            System.out.println("\n*** Double Ended Queue Operations ***");
+            System.out.println("1. Insert at the front");
+            System.out.println("2. Insert at the rear");
+            System.out.println("3. Delete from the front");
+            System.out.println("4. Delete from the rear");
+            System.out.println("5. Peek at the front");
+            System.out.println("6. Peek at the rear");
+            System.out.println("7. Display the deque");
+            System.out.println("8. Check if deque is empty");
+            System.out.println("9. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt(); // Read user's choice
+
+            // Perform the corresponding operation based on user's choice
+            switch (choice) {
+                case 1:
+                    // Insert at front
+                    System.out.print("Enter value to insert at front: ");
+                    int frontValue = scanner.nextInt(); // Read the value to insert at the front
+                    deque.insertFront(frontValue); // Call the insertFront method to add the value
+                    break;
+                case 2:
+                    // Insert at rear
+                    System.out.print("Enter value to insert at rear: ");
+                    int rearValue = scanner.nextInt(); // Read the value to insert at the rear
+                    deque.insertRear(rearValue); // Call the insertRear method to add the value
+                    break;
+                case 3:
+                    // Delete from front
+                    deque.deleteFront(); // Call the deleteFront method to remove the front element
+                    break;
+                case 4:
+                    // Delete from rear
+                    deque.deleteRear(); // Call the deleteRear method to remove the rear element
+                    break;
+                case 5:
+                    // Peek at front
+                    deque.peekFront(); // Call the peekFront method to display the front element
+                    break;
+                case 6:
+                    // Peek at rear
+                    deque.peekRear(); // Call the peekRear method to display the rear element
+                    break;
+                case 7:
+                    // Display the deque
+                    deque.display(); // Call the display method to show all elements in the deque
+                    break;
+                case 8:
+                    // Check if deque is empty
+                    if (deque.isEmpty()) {
+                        System.out.println("Deque is empty."); // Print if the deque is empty
+                    } else {
+                        System.out.println("Deque is not empty."); // Print if the deque is not empty
+                    }
+                    break;
+                case 9:
+                    // Exit
+                    System.out.println("Exiting..."); // Print the exit message
+                    scanner.close(); // Close the scanner to free resources
+                    return; // Exit the program
+                default:
+                    // Handle invalid choices
+                    System.out.println("Invalid choice, please try again.");
+            }
+        }
+    }
+}
+
