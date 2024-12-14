@@ -1,0 +1,200 @@
+
+
+import java.util.Scanner;
+
+//Node class represents a node in the Binary Search Tree (BST)
+class Node {
+ int key;        // The key (data) of the node
+ Node left, right;  // Left and right child nodes
+
+ // Constructor to initialize a node with a given key
+ public Node(int key) {
+     this.key = key;  // Assign the key value
+     left = right = null;  // Initially, no left or right children
+ }
+}
+
+//BinarySearchTree class represents the Binary Search Tree itself
+class BinarySearchTree {
+ Node root; // The root node of the tree
+
+ // Constructor to initialize an empty Binary Search Tree
+ BinarySearchTree() {
+     root = null;  // The tree is initially empty
+ }
+
+ // Method to insert a new key into the BST
+ void insert(int key) {
+     root = insertRec(root, key);  // Call the recursive insert method
+ }
+
+ // Recursive method to insert a new node with the given key into the BST
+ Node insertRec(Node root, int key) {
+     // If the tree or subtree is empty, insert the new node
+     if (root == null) {
+         root = new Node(key);
+         return root;
+     }
+
+     // If the key is smaller than the current node's key, insert it in the left subtree
+     if (key < root.key) {
+         root.left = insertRec(root.left, key);
+     }
+     // If the key is greater than the current node's key, insert it in the right subtree
+     else if (key > root.key) {
+         root.right = insertRec(root.right, key);
+     }
+
+     // Return the root to maintain the tree structure
+     return root;
+ }
+
+ // Method to search for a key in the BST
+ boolean search(int key) {
+     return searchRec(root, key);  // Call the recursive search method
+ }
+
+ // Recursive method to search for a key in the BST
+ boolean searchRec(Node root, int key) {
+     // If the root is null, the key is not found
+     if (root == null) {
+         return false;
+     }
+
+     // If the key matches the current node's key, return true
+     if (key == root.key) {
+         return true;
+     }
+
+     // If the key is smaller than the current node's key, search in the left subtree
+     // Otherwise, search in the right subtree
+     return key < root.key ? searchRec(root.left, key) : searchRec(root.right, key);
+ }
+
+ // Method to find the smallest node in the BST
+ int findMin() {
+     if (root == null) {
+         throw new IllegalStateException("Tree is empty.");  // Throw an exception if the tree is empty
+     }
+     return findMinRec(root).key;  // Call the recursive findMin method to get the smallest key
+ }
+
+ // Recursive method to find the smallest node in the BST
+ Node findMinRec(Node root) {
+     // If the left child is null, this is the smallest node
+     if (root.left == null) {
+         return root;
+     }
+     // Otherwise, continue to search in the left subtree
+     return findMinRec(root.left);
+ }
+
+ // Method to find the largest node in the BST
+ int findMax() {
+     if (root == null) {
+         throw new IllegalStateException("Tree is empty.");  // Throw an exception if the tree is empty
+     }
+     return findMaxRec(root).key;  // Call the recursive findMax method to get the largest key
+ }
+
+ // Recursive method to find the largest node in the BST
+ Node findMaxRec(Node root) {
+     // If the right child is null, this is the largest node
+     if (root.right == null) {
+         return root;
+     }
+     // Otherwise, continue to search in the right subtree
+     return findMaxRec(root.right);
+ }
+
+ // Method to count the number of nodes in the BST
+ int countNodes() {
+     return countNodesRec(root);  // Call the recursive countNodes method
+ }
+
+ // Recursive method to count the number of nodes in the BST
+ int countNodesRec(Node root) {
+     // If the current node is null, return 0
+     if (root == null) {
+         return 0;
+     }
+     // Otherwise, count the current node (1) and recursively count the nodes in the left and right subtrees
+     return 1 + countNodesRec(root.left) + countNodesRec(root.right);
+ }
+}
+
+//Main class to perform operations on the Binary Search Tree (BST)
+public class MainOperation {
+ public static void main(String[] args) {
+     BinarySearchTree bst = new BinarySearchTree();  // Create a new Binary Search Tree
+     Scanner scanner = new Scanner(System.in);  // Create a scanner object to read input from the user
+
+     // Main loop for performing operations on the BST
+     System.out.println("\nBinary Search Tree Operations");
+     while (true) {
+         // Display the menu of options for the user
+         System.out.println("\nChoose an operation:");
+         System.out.println("1. Insert");
+         System.out.println("2. Search");
+         System.out.println("3. Find Smallest Node");
+         System.out.println("4. Find Largest Node");
+         System.out.println("5. Count Number of Nodes");
+         System.out.println("6. Exit");
+         System.out.print("Enter your choice: ");
+         
+         int choice = scanner.nextInt();  // Read the user's choice
+
+         // Perform the selected operation based on the user's choice
+         switch (choice) {
+             case 1:  // Insert a value into the BST
+                 System.out.print("Enter value to insert: ");
+                 int value = scanner.nextInt();  // Read the value to insert
+                 bst.insert(value);  // Insert the value into the BST
+                 System.out.println(value + " inserted into the BST.");
+                 break;
+
+             case 2:  // Search for a value in the BST
+                 System.out.print("Enter value to search: ");
+                 int searchValue = scanner.nextInt();  // Read the value to search for
+                 boolean found = bst.search(searchValue);  // Search for the value
+                 if (found) {
+                     System.out.println(searchValue + " exists in the BST.");
+                 } else {
+                     System.out.println(searchValue + " does not exist in the BST.");
+                 }
+                 break;
+
+             case 3:  // Find the smallest node in the BST
+                 try {
+                     int smallest = bst.findMin();  // Get the smallest node
+                     System.out.println("Smallest node: " + smallest);
+                 } catch (IllegalStateException e) {
+                     System.out.println(e.getMessage());  // Handle the exception if the tree is empty
+                 }
+                 break;
+
+             case 4:  // Find the largest node in the BST
+                 try {
+                     int largest = bst.findMax();  // Get the largest node
+                     System.out.println("Largest node: " + largest);
+                 } catch (IllegalStateException e) {
+                     System.out.println(e.getMessage());  // Handle the exception if the tree is empty
+                 }
+                 break;
+
+             case 5:  // Count the number of nodes in the BST
+                 int count = bst.countNodes();  // Get the count of nodes
+                 System.out.println("Number of nodes: " + count);
+                 break;
+
+             case 6:  // Exit the program
+                 System.out.println("Exiting program.");
+                 scanner.close();  // Close the scanner object to avoid resource leak
+                 return;  // Exit the program
+
+             default:  // Handle invalid choices
+                 System.out.println("Invalid choice! Please try again.");
+         }
+     }
+ }
+}
