@@ -1,0 +1,251 @@
+//prct 3 a
+import java.util.Scanner;
+
+public class ModuloDivisionHashing {
+    private int[] hashTable;  // Array to store the hash table
+    private int tableSize;    // Size of the hash table
+
+    // Constructor to initialize the hash table with a given size
+    public ModuloDivisionHashing(int size) {
+        tableSize = size;  // Set the table size
+        hashTable = new int[tableSize];  // Create the hash table array
+        // Initialize hash table with -1 to indicate empty slots
+        for (int i = 0; i < tableSize; i++) {
+            hashTable[i] = -1;  // -1 means the slot is empty
+        }
+    }
+
+    // Hash function using modulo division
+    private int hash(int key) {
+        return key % tableSize;  // Returns the index in the hash table based on the key
+    }
+
+    // Insert a key into the hash table
+    public void insert(int key) {
+        int index = hash(key);  // Get the index based on the hash function
+        // Linear probing in case of collision
+        while (hashTable[index] != -1) {  // If the slot is already occupied
+            index = (index + 1) % tableSize;  // Move to the next index (wrap around using modulo)
+        }
+        hashTable[index] = key;  // Insert the key at the empty slot
+    }
+
+    // Display the contents of the hash table
+    public void display() {
+        System.out.println("Hash Table: ");
+        for (int i = 0; i < tableSize; i++) {
+            // Print the index and the value at that index, if the slot is not empty
+            if (hashTable[i] != -1) {
+                System.out.println("Index " + i + ": " + hashTable[i]);
+            } else {
+                System.out.println("Index " + i + ": empty");  // If the slot is empty
+            }
+        }
+    }
+
+    // Main method to run the program
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);  // Scanner to read input
+        // Hash table size is fixed at 13
+        int size = 13;
+        ModuloDivisionHashing hashTable = new ModuloDivisionHashing(size);  // Create a new hash table with the given size
+
+        // Fixed keys to be inserted
+        int[] keys = {55, 65, 20, 12, 66, 26, 90};  // The keys to be inserted into the hash table
+
+        System.out.println("Inserting keys: ");
+        // Insert each key into the hash table
+        for (int key : keys) {
+            System.out.println("Inserting key: " + key);  // Print the key being inserted
+            hashTable.insert(key);  // Insert the key into the hash table
+        }
+
+        // Display the hash table after insertion
+        hashTable.display();  
+        scanner.close();  // Close the scanner
+    }
+}
+
+
+// prct 3b
+import java.util.Scanner;  // Import Scanner class to take user input
+
+public class DigitExtraction {
+    public int[] hashTable;  // Declare an integer array to represent the hash table
+    public int tableSize;    // Declare an integer to store the size of the hash table
+
+    // Constructor to initialize the hash table with a given size
+    public DigitExtraction(int size) {
+        tableSize = size;  // Initialize the table size with the provided size
+        hashTable = new int[tableSize];  // Create a new array to represent the hash table with the specified size
+        
+        // Initialize all elements of the hash table with -1 to indicate empty slots
+        for (int i = 0; i < tableSize; i++) {
+            hashTable[i] = -1;  // -1 represents an empty slot in the hash table
+        }
+    }
+
+    // Digit extraction hash function that extracts the 1st, 3rd, and 5th digits from the number
+    private int extractDigits(int key) {
+        String keyStr = String.valueOf(key);  // Convert the key (integer) to a string for easy digit extraction
+        
+        // Extract the 1st, 3rd, and 5th digits from the string
+        // Ensure that the number has enough digits to avoid IndexOutOfBoundsException
+        int extractedNumber = Integer.parseInt("" + keyStr.charAt(0) + keyStr.charAt(2) + keyStr.charAt(4));
+        
+        // Return the result of the extracted number modulo tableSize to ensure it fits within the table
+        return extractedNumber % tableSize;
+    }
+
+    // Insert a key into the hash table using the extracted digits
+    public void insert(int key) {
+        // Use the digit extraction function to get the index where the key will be inserted
+        int index = extractDigits(key);
+        
+        // Linear probing to resolve collisions (i.e., if the slot is already occupied)
+        while (hashTable[index] != -1) {
+            index = (index + 1) % tableSize;  // Move to the next index and wrap around using modulo
+        }
+        
+        // Insert the key into the hash table at the calculated index
+        hashTable[index] = key;
+    }
+
+    // Display the contents of the hash table
+    public void display() {
+        System.out.println("Hash Table:");  // Print the header for the hash table
+        
+        // Loop through each index in the hash table
+        for (int i = 0; i < tableSize; i++) {
+            // If the current slot is not empty (i.e., it is not -1)
+            if (hashTable[i] != -1) {
+                // Print the index and the value stored at that index
+                System.out.println("Index " + i + ": " + hashTable[i]);
+            } else {
+                // If the current slot is empty, print that it is empty
+                System.out.println("Index " + i + ": empty");
+            }
+        }
+    }
+
+    // Main method to run the program
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);  // Initialize scanner to take user input
+        
+        // Set the hash table size to 19 (a fixed size)
+        int size = 19;
+        
+        // Create a new instance of the DigitExtraction class with the specified table size
+        DigitExtraction hashTable = new DigitExtraction(size);
+
+        // Define an array of keys to be inserted into the hash table
+        int[] keys = {224562, 140145, 144467, 137456, 214576, 199645, 214562};
+
+        // Display the message indicating the start of key insertion
+        System.out.println("Inserting keys: ");
+        
+        // Loop through each key in the keys array and insert it into the hash table
+        for (int key : keys) {
+            System.out.println("Inserting key: " + key);  // Print the key being inserted
+            hashTable.insert(key);  // Insert the key into the hash table
+        }
+
+        // Display the contents of the hash table after all insertions
+        hashTable.display();
+        
+        scanner.close();  // Close the scanner to free up resources
+    }
+}
+
+// prct 3 b 
+import java.util.Scanner;  // Import the Scanner class to read user input
+
+public class FoldBoundary {
+    public int[] hashTable;  // Declare an array of integers to represent the hash table
+    public int tableSize;    // Declare an integer to store the size of the hash table
+
+    // Constructor to initialize the hash table with a given size
+    public FoldBoundary(int size) {
+        tableSize = size;  // Set the size of the hash table to the provided value
+        hashTable = new int[tableSize];  // Initialize the hash table array with the specified size
+        
+        // Initialize all elements of the hash table to -1, indicating that the slots are empty
+        for (int i = 0; i < tableSize; i++) {
+            hashTable[i] = -1;  // -1 is used to mark empty slots in the hash table
+        }
+    }
+
+    // Fold boundary hash function that splits the key into two parts and adds them together
+    private int foldBoundary(int key) {
+        String keyStr = String.valueOf(key);  // Convert the key (integer) into a string to easily split it
+        int mid = keyStr.length() / 2;  // Find the midpoint of the string representing the key
+        // Split the key into two parts
+        int part1 = Integer.parseInt(keyStr.substring(0, mid));  // Get the first part (from index 0 to mid)
+        int part2 = Integer.parseInt(keyStr.substring(mid));  // Get the second part (from mid to the end)
+        
+        // Add the two parts together
+        int foldedValue = part1 + part2;  // Sum the two parts to create a folded value
+        
+        // Return the modulo of the folded value with the table size, to ensure the index is within bounds
+        return foldedValue % tableSize;
+    }
+
+    // Method to insert a key into the hash table using the fold boundary hash function
+    public void insert(int key) {
+        // Calculate the index for the key using the foldBoundary function
+        int index = foldBoundary(key);
+        
+        // Use linear probing to resolve collisions: if the calculated index is occupied, move to the next slot
+        while (hashTable[index] != -1) {  // If the slot is not empty (it is already occupied)
+            index = (index + 1) % tableSize;  // Move to the next index and wrap around using modulo
+        }
+        
+        // Insert the key at the found empty slot
+        hashTable[index] = key;
+    }
+
+    // Method to display the contents of the hash table
+    public void display() {
+        System.out.println("Hash Table:");  // Print the heading for the hash table
+        // Loop through all the slots of the hash table
+        for (int i = 0; i < tableSize; i++) {
+            // Check if the slot is not empty
+            if (hashTable[i] != -1) {
+                // If not empty, print the index and the key stored at that index
+                System.out.println("Index " + i + ": " + hashTable[i]);
+            } else {
+                // If the slot is empty, print that it is empty
+                System.out.println("Index " + i + ": empty");
+            }
+        }
+    }
+
+    // Main method to execute the program
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);  // Initialize the scanner to take input from the user
+        
+        // Define the size of the hash table
+        int size = 19;
+        
+        // Create an instance of FoldBoundary with the specified table size
+        FoldBoundary hashTable = new FoldBoundary(size);
+        
+        // Define an array of keys that will be inserted into the hash table
+        int[] keys = {224562, 140145, 144467, 137456, 214576, 199645, 214562, 162145, 234534};
+        
+        // Print the message to indicate the start of key insertion
+        System.out.println("Inserting keys: ");
+        
+        // Loop through each key in the keys array and insert it into the hash table
+        for (int key : keys) {
+            System.out.println("Inserting key: " + key);  // Print the key being inserted
+            hashTable.insert(key);  // Insert the key into the hash table
+        }
+        
+        // After all keys are inserted, display the contents of the hash table
+        hashTable.display();
+        
+        // Close the scanner to free up resources
+        scanner.close();
+    }
+}
