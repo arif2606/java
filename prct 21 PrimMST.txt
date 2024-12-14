@@ -1,0 +1,81 @@
+import java.util.*;
+
+public class PrimMST {
+
+    static final int V = 5; // Number of vertices in the graph (you can change this value)
+
+    // Function to find the vertex with the minimum key value which is not yet included in MST
+    static int minKey(int key[], Boolean mstSet[]) {
+        int min = Integer.MAX_VALUE; // Initialize the minimum key value as infinity
+        int minIndex = -1; // Initialize the index of the vertex with the minimum key value
+
+        // Loop through all vertices and find the vertex with the minimum key value
+        for (int v = 0; v < V; v++) {
+            if (!mstSet[v] && key[v] < min) { // If vertex v is not yet in MST and its key is smaller than current min
+                min = key[v]; // Update the minimum key value
+                minIndex = v; // Update the vertex with the minimum key value
+            }
+        }
+        return minIndex; // Return the index of the vertex with the minimum key value
+    }
+
+    // Function to implement Prim's MST algorithm
+    static void primMST(int graph[][]) {
+        int parent[] = new int[V]; // Array to store the parent of each vertex in the MST
+        int key[] = new int[V]; // Array to store the minimum weight edge for each vertex
+        Boolean mstSet[] = new Boolean[V]; // Array to track which vertices are included in the MST
+
+        // Initialize all key values to infinity and mstSet[] to false (not in MST)
+        Arrays.fill(key, Integer.MAX_VALUE);
+        Arrays.fill(mstSet, false);
+
+        // Start from the first vertex (vertex 0)
+        key[0] = 0; // Set the key of the starting vertex to 0
+        parent[0] = -1; // The first vertex is always the root of the MST, so its parent is -1
+
+        // Loop to find the MST
+        for (int count = 0; count < V - 1; count++) {
+            // Pick the minimum key vertex from the set of vertices not yet included in the MST
+            int u = minKey(key, mstSet); // Get the vertex with the minimum key value
+            mstSet[u] = true; // Include vertex u in the MST
+
+            // Update the key values and parent[] for the adjacent vertices of the selected vertex u
+            for (int v = 0; v < V; v++) {
+                // If there is an edge between u and v, v is not in MST, and the weight of edge u-v is smaller than the current key of v
+                if (graph[u][v] != 0 && !mstSet[v] && graph[u][v] < key[v]) {
+                    parent[v] = u; // Update the parent of v to u (u is included in MST now)
+                    key[v] = graph[u][v]; // Update the key value of v
+                }
+            }
+        }
+
+        // Print the constructed MST
+        printMST(parent, graph);
+    }
+
+    // Function to print the MST, using the parent[] array to show the edges of the MST
+    static void printMST(int parent[], int graph[][]) {
+        System.out.println("Edge \tWeight"); // Print the header for the MST edges and their weights
+
+        // Loop through all vertices (except vertex 0) to print the MST edges
+        for (int i = 1; i < V; i++) {
+            System.out.println(parent[i] + " - " + i + "\t" + graph[i][parent[i]]);
+            // For each vertex, print the edge connecting it to its parent in the MST
+        }
+    }
+
+    // Main function
+    public static void main(String[] args) {
+        // Graph represented as an adjacency matrix
+        int graph[][] = new int[][] {
+            {0, 2, 0, 6, 0},  // Vertex 0 is connected to Vertex 1 (weight 2), Vertex 3 (weight 6)
+            {2, 0, 3, 8, 5},  // Vertex 1 is connected to Vertex 0 (weight 2), Vertex 2 (weight 3), Vertex 3 (weight 8), Vertex 4 (weight 5)
+            {0, 3, 0, 0, 7},  // Vertex 2 is connected to Vertex 1 (weight 3), Vertex 4 (weight 7)
+            {6, 8, 0, 0, 9},  // Vertex 3 is connected to Vertex 0 (weight 6), Vertex 1 (weight 8), Vertex 4 (weight 9)
+            {0, 5, 7, 9, 0}   // Vertex 4 is connected to Vertex 1 (weight 5), Vertex 2 (weight 7), Vertex 3 (weight 9)
+        };
+
+        // Call Prim's algorithm to find the MST
+        primMST(graph); // Pass the graph as an adjacency matrix
+    }
+}
