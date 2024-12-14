@@ -1,0 +1,314 @@
+// prct 16 a MinHeap with all operations.
+import java.util.Scanner;
+
+class Heap {
+    private static final int SIZE = 15; // Maximum size of the heap
+    private int last; // Keeps track of the number of elements in the heap
+    private final int[] a; // Array to store heap elements
+
+    // Constructor: Initializes the heap
+    public Heap() {
+        last = 0; // Initialize last to 0, meaning the heap is empty
+        a = new int[SIZE]; // Allocate memory for the heap array
+    }
+
+    // Method to get input elements for the heap
+    public void get() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("\nEnter size of the heap: ");
+        last = scanner.nextInt(); // Set the size of the heap
+        for (int i = 0; i < last; i++) {
+            System.out.print("\nEnter the element: ");
+            a[i] = scanner.nextInt(); // Store each element in the heap array
+        }
+        buildHeap(); // Build the heap from the input array
+    }
+
+    // Method to build the heap from the given array of elements
+    private void buildHeap() {
+        // Start from the last non-leaf node (last/2 - 1) and move upwards
+        int walk = (last / 2) - 1;
+        while (walk >= 0) {
+            reheapDown(walk); // Apply reheapDown to maintain the heap property
+            walk--; // Move to the previous node
+        }
+    }
+
+    // Method to maintain the Min-Heap property by moving an element up the heap
+    private void reheapUp(int h) {
+        int parent, hold;
+        if (h > 0) { // If the current node is not the root
+            parent = (h - 1) / 2; // Calculate the index of the parent node
+            if (a[h] < a[parent]) { // If the current node is smaller than the parent
+                // Swap the current node with its parent
+                hold = a[parent];
+                a[parent] = a[h];
+                a[h] = hold;
+                reheapUp(parent); // Recursively apply reheapUp to the parent
+            }
+        }
+    }
+
+    // Method to insert a new element into the heap
+    public void insert(int item) {
+        if (last == SIZE) { // If the heap is full
+            System.out.println("\nHeap is full");
+        } else {
+            a[last] = item; // Insert the item at the last position
+            reheapUp(last); // Move the item up to maintain the heap property
+            last = last + 1; // Increment the heap size
+            System.out.println("\nItem inserted successfully");
+        }
+    }
+
+    // Method to delete the root node (minimum element in Min-Heap)
+    public void deleteNode() {
+        if (last <= 0) { // If the heap is empty
+            System.out.println("\nCan't delete, heap is empty");
+        } else {
+            int item = a[0]; // The root (minimum element)
+            a[0] = a[last - 1]; // Move the last element to the root
+            last = last - 1; // Decrease the heap size
+            reheapDown(0); // Restore the heap property by moving the new root down
+            System.out.println("\nThe deleted item is: " + item); // Output the deleted item
+        }
+    }
+
+    // Method to maintain the Min-Heap property by moving a node down the heap
+    private void reheapDown(int root) {
+        int hold, lkey, rkey, smallerChildIndex;
+        int leftChild = 2 * root + 1; // Left child index
+        int rightChild = 2 * root + 2; // Right child index
+
+        if (leftChild < last) { // If the left child exists
+            lkey = a[leftChild]; // Get the value of the left child
+            if (rightChild < last) { // If the right child exists
+                rkey = a[rightChild]; // Get the value of the right child
+            } else {
+                rkey = Integer.MAX_VALUE; // If the right child doesn't exist, assign a large value
+            }
+
+            // Compare left and right child and choose the smaller one
+            if (lkey < rkey) {
+                smallerChildIndex = leftChild;
+            } else {
+                smallerChildIndex = rightChild;
+            }
+
+            // If the root is greater than the smallest child, swap them
+            if (a[root] > a[smallerChildIndex]) {
+                hold = a[root];
+                a[root] = a[smallerChildIndex];
+                a[smallerChildIndex] = hold;
+                reheapDown(smallerChildIndex); // Recursively apply reheapDown to the swapped child
+            }
+        }
+    }
+
+    // Method to display the heap
+    public void display() {
+        System.out.println("\nCount: " + last); // Output the number of elements in the heap
+        System.out.println("\nThe heap constructed is:");
+        for (int i = 0; i < last; i++) {
+            System.out.print("\t" + a[i]); // Print each element of the heap
+        }
+        System.out.println();
+    }
+
+    // Main method to interact with the user
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Heap h = new Heap(); // Create a new heap object
+        h.get(); // Initialize the heap with input from the user
+
+        // Infinite loop to provide user choices for heap operations
+        while (true) {
+            System.out.println("\n1. Insert node\n2. Delete node\n3. Display\n4. Quit\nEnter your choice:");
+            int ch = scanner.nextInt(); // Read the user's choice
+            switch (ch) {
+                case 1:
+                    System.out.print("\nEnter element to be inserted: ");
+                    int item = scanner.nextInt(); // Read the element to be inserted
+                    h.insert(item); // Insert the element into the heap
+                    break;
+                case 2:
+                    h.deleteNode(); // Delete the root node of the heap
+                    break;
+                case 3:
+                    h.display(); // Display the heap
+                    break;
+                case 4:
+                    System.out.println("Exiting..."); // Exit the program
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again."); // Handle invalid choice
+            }
+        }
+    }
+}
+
+
+//prct 16 b MaxHeap
+
+import java.util.Scanner;
+
+class MaxHeap {
+    private static final int SIZE = 15;  // Max size of the heap
+    private int last;  // Index of the last element
+    private final int[] a;  // Array to store heap elements
+
+    // Constructor to initialize the heap
+    public MaxHeap() {
+        last = 0;
+        a = new int[SIZE];  // Create an array of fixed size
+        // Initialize all elements to 0
+        for (int i = 0; i < SIZE; i++) {
+            a[i] = 0;
+        }
+    }
+
+    // Method to take input from the user
+    public void get() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("\nEnter size of the heap: ");
+        last = scanner.nextInt();  // Get the number of elements
+        // Get each element of the heap
+        for (int i = 0; i < last; i++) {
+            System.out.print("\nEnter the element: ");
+            a[i] = scanner.nextInt();  // Store element in the array
+        }
+        // Build the heap
+        buildHeap(a);
+    }
+
+    // Method to build the heap
+    private void buildHeap(int[] a) {
+        int walk = 0;
+        while (walk < last) {
+            reheapUp(a, walk);
+            walk = walk + 1;  // Move to the next element
+        }
+    }
+
+    // Method to move an element upwards to maintain heap property
+    private void reheapUp(int[] a, int h) {
+        int parent, hold;
+        if (h > 0) {
+            parent = (h - 1) / 2;  // Calculate the parent index
+            // If the current element is greater than its parent, swap them
+            if (a[h] > a[parent]) {
+                hold = a[parent];
+                a[parent] = a[h];
+                a[h] = hold;
+                // Recursively reheap up
+                reheapUp(a, parent);
+            }
+        }
+    }
+
+    // Method to insert a new element into the heap
+    public void insert(int item) {
+        if (last + 1 == SIZE) {
+            System.out.println("\nHeap full");
+        } else {
+            a[last] = item;  // Add the item at the last position
+            // Maintain heap property by moving the item upwards
+            reheapUp(a, last);
+            last = last + 1;  // Increment the last index
+            System.out.println("\nItem is inserted successfully");
+        }
+    }
+
+    // Method to delete the root element (max element) from the heap
+    public void deleteNode() {
+        if (last <= 0) {
+            System.out.println("\nCan't delete");
+        } else {
+            int item = a[0];  // Store the root item
+            a[0] = a[last - 1];  // Move the last element to the root
+            last = last - 1;  // Decrease the last index
+            // Maintain heap property by moving the root down
+            reheapDown(a, 0, last);
+            System.out.println("\nThe deleted item is: " + item);
+        }
+    }
+
+    // Method to maintain the max-heap property by moving the element downwards
+    private void reheapDown(int[] a, int root, int last) {
+        int hold, lkey, rkey, largerChildIndex;
+        // Check if the root has a left child
+        if ((root * 2 + 1) < last) {
+            lkey = a[root * 2 + 1];  // Left child key
+            rkey = Integer.MIN_VALUE;  // Initialize right child key as minimum value
+            // Check if the root has a right child
+            if ((root * 2 + 2) < last) {
+                rkey = a[root * 2 + 2];  // Right child key
+            }
+
+            // Determine the index of the larger child
+            if (lkey > rkey) {
+                largerChildIndex = root * 2 + 1;
+            } else {
+                largerChildIndex = root * 2 + 2;
+            }
+
+            // If the root is smaller than the larger child, swap them
+            if (a[root] < a[largerChildIndex]) {
+                hold = a[root];
+                a[root] = a[largerChildIndex];
+                a[largerChildIndex] = hold;
+                // Recursively move the larger child down
+                reheapDown(a, largerChildIndex, last);
+            }
+        }
+    }
+
+    // Method to display the heap elements
+    public void display() {
+        System.out.println("\nCount: " + last);  // Display the number of elements
+        System.out.println("\nThe heap constructed is:");
+        // Print each element in the heap
+        for (int i = 0; i < last; i++) {
+            System.out.print("\t" + a[i]);
+        }
+        System.out.println();
+    }
+
+    // Main method to interact with the user
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        MaxHeap heap = new MaxHeap();  // Create a new MaxHeap object
+        heap.get();  // Get elements for the heap
+
+        // Menu to interact with the heap
+        while (true) {
+            System.out.println("\n1. Insert node\n2. Delete node\n3. Display\n4. Quit\nEnter your choice:");
+            int ch = scanner.nextInt();
+            switch (ch) {
+                case 1:
+                    // Insert new node
+                    System.out.print("\nEnter element to be inserted: ");
+                    int item = scanner.nextInt();
+                    heap.insert(item);
+                    break;
+                case 2:
+                    // Delete root node
+                    heap.deleteNode();
+                    break;
+                case 3:
+                    // Display the heap
+                    heap.display();
+                    break;
+                case 4:
+                    // Exit the program
+                    System.out.println("Exiting...");
+                    System.exit(0);
+                    break;
+                default:
+                    // Invalid choice
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
