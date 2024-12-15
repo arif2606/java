@@ -1,205 +1,311 @@
 import java.util.Scanner;
 
+//Node class represents each element in the linked list
 class Node {
-    int data;
-    Node next;
+ int data;  // Data stored in the node
+ Node link; // Reference to the next node
 
-    // Constructor to create a new node
-    public Node(int data) {
-        this.data = data;
-        this.next = null;
-    }
+ // Constructor to create a new node with the provided data
+ public Node(int data) {
+     this.data = data;  // Initialize node's data
+     this.link = null;  // Initially, link is null (no next node)
+ }
 }
 
-class SinglyLinkedList {
-    private Node head;
+//LinkedList class that defines all the operations on the singly linked list
+class LinkedList {
+ private Node start;  // Reference to the first node (head) of the list
 
-    // Constructor to initialize the list as empty
-    public SinglyLinkedList() {
-        head = null;
-    }
+ // Constructor to initialize an empty list
+ public LinkedList() {
+     this.start = null;  // Initially, the list is empty
+ }
 
-    // Method to insert at the beginning of the list
-    public void insertAtBeginning(int data) {
-        Node newNode = new Node(data);
-        newNode.next = head;
-        head = newNode;
-        System.out.println("Inserted at the beginning.");
-    }
+ // Method to create the list with multiple nodes by user input
+ public void createList() {
+     Scanner scanner = new Scanner(System.in);
+     System.out.print("Enter the number of elements to add: ");
+     int n = scanner.nextInt();
+     for (int i = 0; i < n; i++) {
+         System.out.print("Enter the element: ");
+         int data = scanner.nextInt();
+         insertLast(data);  // Insert each element at the end of the list
+     }
+ }
 
-    // Method to insert at the end of the list
-    public void insertAtEnd(int data) {
-        Node newNode = new Node(data);
-        if (head == null) {
-            head = newNode;
-        } else {
-            Node temp = head;
-            while (temp.next != null) {
-                temp = temp.next;
-            }
-            temp.next = newNode;
-        }
-        System.out.println("Inserted at the end.");
-    }
+ // Method to display all the elements in the list
+ public void display() {
+     if (start == null) {
+         System.out.println("The list is empty.");
+         return;
+     }
+     System.out.println("List elements:");
+     Node temp = start;
+     // Traverse the list and print each node's data
+     while (temp != null) {
+         System.out.print(temp.data + " ");
+         temp = temp.link;  // Move to the next node
+     }
+     System.out.println();
+ }
 
-    // Method to create a list with multiple elements
-    public void createList() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter the number of elements to add: ");
-        int n = sc.nextInt();
-        for (int i = 0; i < n; i++) {
-            System.out.print("Enter value for element " + (i + 1) + ": ");
-            int value = sc.nextInt();
-            insertAtEnd(value); // Using insertAtEnd to add elements at the end of the list
-        }
-        System.out.println("List created successfully.");
-    }
+ // Method to insert a new node at the beginning of the list
+ public void insertBeginning(int data) {
+     Node newNode = new Node(data);  // Create a new node with the given data
+     newNode.link = start;  // Point new node's link to the current start
+     start = newNode;  // Make new node the start of the list
+     System.out.println("Inserted at the beginning.");
+ }
 
-    // Method to display the list
-    public void display() {
-        if (head == null) {
-            System.out.println("List is empty.");
-            return;
-        }
-        Node temp = head;
-        System.out.print("List elements: ");
-        while (temp != null) {
-            System.out.print(temp.data + " ");
-            temp = temp.next;
-        }
-        System.out.println();
-    }
+ // Method to insert a new node at the end of the list
+ public void insertLast(int data) {
+     Node newNode = new Node(data);  // Create a new node with the given data
+     if (start == null) {  // If the list is empty, make new node the start
+         start = newNode;
+     } else {
+         Node temp = start;
+         // Traverse to the last node
+         while (temp.link != null) {
+             temp = temp.link;
+         }
+         temp.link = newNode;  // Link the last node to the new node
+     }
+     System.out.println("Inserted at the end.");
+ }
 
-    // Method to search for an element in the list
-    public void search(int data) {
-        Node temp = head;
-        int position = 1;
-        while (temp != null) {
-            if (temp.data == data) {
-                System.out.println("Element " + data + " found at position: " + position);
-                return;
-            }
-            temp = temp.next;
-            position++;
-        }
-        System.out.println("Element " + data + " not found.");
-    }
+ // Method to insert a new node after a specific position
+ public void insertAfter(int data, int position) {
+     Node temp = start;
+     // Traverse to the node before the specified position
+     for (int i = 0; i < position - 1; i++) {
+         if (temp == null) {  // If position exceeds list length, stop
+             System.out.println("Position exceeds list length.");
+             return;
+         }
+         temp = temp.link;
+     }
+     // Create the new node and insert it after the target node
+     Node newNode = new Node(data);
+     newNode.link = temp.link;  // Link new node to the next node of temp
+     temp.link = newNode;  // Link temp node to the new node
+     System.out.println("Inserted at position " + (position + 1));
+ }
 
-    // Method to count the number of nodes in the list
-    public void countNodes() {
-        int count = 0;
-        Node temp = head;
-        while (temp != null) {
-            count++;
-            temp = temp.next;
-        }
-        System.out.println("Number of nodes in the list: " + count);
-    }
+ // Method to delete the first node (from the beginning)
+ public void deleteBeginning() {
+     if (start == null) {
+         System.out.println("The list is empty.");
+         return;
+     }
+     start = start.link;  // Move start to the next node (effectively removing the first node)
+     System.out.println("Deleted from the beginning.");
+ }
 
-    // Method to reverse the list
-    public void reverse() {
-        Node prev = null;
-        Node current = head;
-        Node next;
-        while (current != null) {
-            next = current.next;
-            current.next = prev;
-            prev = current;
-            current = next;
-        }
-        head = prev;
-        System.out.println("List reversed.");
-    }
+ // Method to delete the last node (from the end)
+ public void deleteLast() {
+     if (start == null) {
+         System.out.println("The list is empty.");
+         return;
+     }
+     if (start.link == null) {  // If there is only one node in the list
+         start = null;  // Remove the only node
+     } else {
+         Node temp = start;
+         // Traverse to the second last node
+         while (temp.link.link != null) {
+             temp = temp.link;
+         }
+         temp.link = null;  // Set the link of the second last node to null, removing the last node
+     }
+     System.out.println("Deleted from the end.");
+ }
 
-    // Method to sort the list using Bubble Sort
-    public void sort() {
-        if (head == null || head.next == null) {
-            System.out.println("The list is empty or has only one element.");
-            return;
-        }
+ // Method to delete a specific element by value
+ public void deleteElement(int data) {
+     if (start == null) {
+         System.out.println("The list is empty.");
+         return;
+     }
+     if (start.data == data) {  // If the first node contains the data to delete
+         start = start.link;  // Move start to the next node
+         System.out.println("Deleted element: " + data);
+         return;
+     }
+     Node temp = start;
+     // Traverse the list to find the node with the specified value
+     while (temp.link != null && temp.link.data != data) {
+         temp = temp.link;
+     }
+     if (temp.link == null) {
+         System.out.println("Element not found.");
+     } else {
+         temp.link = temp.link.link;  // Remove the node by skipping it in the link
+         System.out.println("Deleted element: " + data);
+     }
+ }
 
-        Node current = head;
-        Node index = null;
-        int temp;
-        while (current != null) {
-            index = current.next;
-            while (index != null) {
-                if (current.data > index.data) {
-                    temp = current.data;
-                    current.data = index.data;
-                    index.data = temp;
-                }
-                index = index.next;
-            }
-            current = current.next;
-        }
-        System.out.println("List sorted.");
-    }
+ // Method to count the number of nodes in the list
+ public void countNodes() {
+     int count = 0;
+     Node temp = start;
+     // Traverse the list and count each node
+     while (temp != null) {
+         count++;
+         temp = temp.link;
+     }
+     System.out.println("Number of elements: " + count);
+ }
+
+ // Method to reverse the linked list
+ public void reverse() {
+     Node prev = null;
+     Node current = start;
+     Node next;
+     // Traverse the list and reverse the links
+     while (current != null) {
+         next = current.link;  // Store the next node
+         current.link = prev;  // Reverse the link of the current node
+         prev = current;  // Move prev to the current node
+         current = next;  // Move to the next node
+     }
+     start = prev;  // Set the start to the new first node (which was the last node before reversal)
+     System.out.println("List reversed.");
+ }
+
+ // Method to search for an element and return its position
+ public void search(int data) {
+     int position = 1;
+     Node temp = start;
+     // Traverse the list to find the element
+     while (temp != null) {
+         if (temp.data == data) {
+             System.out.println("Element found at position: " + position);
+             return;
+         }
+         temp = temp.link;
+         position++;
+     }
+     System.out.println("Element not found.");
+ }
+
+ // Method to sort the list in ascending order
+ public void sort() {
+     if (start == null) {
+         System.out.println("The list is empty.");
+         return;
+     }
+     Node current = start;
+     // Traverse the list and compare elements to sort
+     while (current != null) {
+         Node index = current.link;
+         while (index != null) {
+             if (current.data > index.data) {
+                 // Swap the data between nodes
+                 int temp = current.data;
+                 current.data = index.data;
+                 index.data = temp;
+             }
+             index = index.link;
+         }
+         current = current.link;
+     }
+     System.out.println("List sorted.");
+ }
 }
 
-public class pratical9 {
-    public static void main(String[] args) {
-        SinglyLinkedList list = new SinglyLinkedList();
-        Scanner sc = new Scanner(System.in);
-        int choice, value;
+//Main class that runs the menu-driven program for Singly Linked List operations
+public class SinglyLinkedList {
+ public static void main(String[] args) {
+     LinkedList list = new LinkedList();  // Create an instance of the LinkedList
+     Scanner scanner = new Scanner(System.in);
+     int choice, value, position;
+     
+     do {
+         // Display menu options for various operations
+         System.out.println("\n***** Operations on Singly Linked List *****");
+         System.out.println("1. Create List");
+         System.out.println("2. Insert Beginning");
+         System.out.println("3. Insert End");
+         System.out.println("4. Insert After Position");
+         System.out.println("5. Delete Beginning");
+         System.out.println("6. Delete Last");
+         System.out.println("7. Delete Element");
+         System.out.println("8. Display List");
+         System.out.println("9. Count Elements");
+         System.out.println("10. Reverse List");
+         System.out.println("11. Search Element");
+         System.out.println("12. Sort List");
+         System.out.println("13. Exit");
+         System.out.print("Enter your choice: ");
+         choice = scanner.nextInt();
 
-        do {
-            System.out.println("\n*** Operations on Singly Linked List ***");
-            System.out.println("1. Create List");
-            System.out.println("2. Insert at Beginning");
-            System.out.println("3. Insert at End");
-            System.out.println("4. Display List");
-            System.out.println("5. Search Element");
-            System.out.println("6. Count Nodes");
-            System.out.println("7. Reverse List");
-            System.out.println("8. Sort List");
-            System.out.println("9. Exit");
-            System.out.print("Enter your choice: ");
-            choice = sc.nextInt();
+         // Perform the selected operation
+         switch (choice) {
+             case 1:
+                 list.createList();
+                 break;
+             case 2:
+                 System.out.print("Enter value to insert at beginning: ");
+                 value = scanner.nextInt();
+                 list.insertBeginning(value);
+                 list.display();
+                 break;
+             case 3:
+                 System.out.print("Enter value to insert at end: ");
+                 value = scanner.nextInt();
+                 list.insertLast(value);
+                 list.display();
+                 break;
+             case 4:
+                 System.out.print("Enter value to insert: ");
+                 value = scanner.nextInt();
+                 System.out.print("Enter position: ");
+                 position = scanner.nextInt();
+                 list.insertAfter(value, position);
+                 list.display();
+                 break;
+             case 5:
+                 list.deleteBeginning();
+                 list.display();
+                 break;
+             case 6:
+                 list.deleteLast();
+                 list.display();
+                 break;
+             case 7:
+                 System.out.print("Enter value to delete: ");
+                 value = scanner.nextInt();
+                 list.deleteElement(value);
+                 list.display();
+                 break;
+             case 8:
+                 list.display();
+                 break;
+             case 9:
+                 list.countNodes();
+                 break;
+             case 10:
+                 list.reverse();
+                 list.display();
+                 break;
+             case 11:
+                 System.out.print("Enter value to search: ");
+                 value = scanner.nextInt();
+                 list.search(value);
+                 break;
+             case 12:
+                 list.sort();
+                 list.display();
+                 break;
+             case 13:
+                 System.out.println("Exiting.");
+                 break;
+             default:
+                 System.out.println("Invalid choice. Try again.");
+                 break;
+         }
+     } while (choice != 13);  // Keep the menu running until the user chooses to exit
 
-            switch (choice) {
-                case 1:
-                    list.createList();
-                    break;
-                case 2:
-                    System.out.print("Enter value to insert at beginning: ");
-                    value = sc.nextInt();
-                    list.insertAtBeginning(value);
-                    break;
-                case 3:
-                    System.out.print("Enter value to insert at end: ");
-                    value = sc.nextInt();
-                    list.insertAtEnd(value);
-                    break;
-                case 4:
-                    list.display();
-                    break;
-                case 5:
-                    System.out.print("Enter value to search: ");
-                    value = sc.nextInt();
-                    list.search(value);
-                    break;
-                case 6:
-                    list.countNodes();
-                    break;
-                case 7:
-                    list.reverse();
-                    list.display();
-                    break;
-                case 8:
-                    list.sort();
-                    list.display();
-                    break;
-                case 9:
-                    System.out.println("Exiting.");
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-                    break;
-            }
-        } while (choice != 9);
-
-        sc.close();
-    }
+     scanner.close();  // Close the scanner when done
+ }
 }
-
