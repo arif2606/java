@@ -1,4 +1,10 @@
 //13 a QueueusingLinkedList
+//To implement an ordinary queue using a linked list and perform its common operations.
+//To implement circular queue using a linked list and perform its common operations.
+//To implement a priority queue using a linked list.
+//To implement a double ended queue using a linked list.
+
+
 import java.util.Scanner;
 class QueueusingLinkedList {
 	 // Node class represents each element of the queue
