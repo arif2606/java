@@ -1,0 +1,137 @@
+import java.util.*;
+
+// Class to represent an edge in the graph
+class Edge {
+    int src, dest, weight; // Source vertex, destination vertex, and weight of the edge
+
+    // Constructor to initialize an edge
+    public Edge(int src, int dest, int weight) {
+        this.src = src;
+        this.dest = dest;
+        this.weight = weight;
+    }
+}
+
+// Class to represent a graph
+class Graph {
+    int V, E; // Number of vertices and edges in the graph
+    Edge[] edge; // Array of edges
+
+    // Constructor to initialize the graph with V vertices and E edges
+    public Graph(int V, int E) {
+        this.V = V; // Set the number of vertices
+        this.E = E; // Set the number of edges
+        this.edge = new Edge[E]; // Create an array of edges
+    }
+}
+
+// Class to represent a subset for union-find
+class Subset {
+    int parent, rank;
+
+    // Constructor to initialize a subset with parent and rank
+    public Subset(int parent, int rank) {
+        this.parent = parent; // Set the parent of the subset
+        this.rank = rank; // Set the rank of the subset
+    }
+}
+
+// Main class to implement Kruskal's Algorithm
+public class KruskalMST {
+
+    // Find function with path compression
+    static int find(Subset[] subsets, int i) {
+        // If i is not the parent of itself, recursively find the root of the set
+        if (subsets[i].parent != i) {
+            subsets[i].parent = find(subsets, subsets[i].parent); // Path compression step
+        }
+        return subsets[i].parent; // Return the parent of the subset
+    }
+
+    // Union function with union by rank
+    static void union(Subset[] subsets, int x, int y) {
+        // Find the roots of the sets containing x and y
+        int xroot = find(subsets, x);
+        int yroot = find(subsets, y);
+
+        // Union by rank
+        if (subsets[xroot].rank < subsets[yroot].rank) {
+            subsets[xroot].parent = yroot; // Make yroot the parent of xroot
+        } else if (subsets[xroot].rank > subsets[yroot].rank) {
+            subsets[yroot].parent = xroot; // Make xroot the parent of yroot
+        } else {
+            subsets[yroot].parent = xroot; // If ranks are equal, make xroot the parent
+            subsets[xroot].rank++; // Increment the rank of xroot
+        }
+    }
+
+    // Comparator to sort edges based on their weight
+    static class EdgeComparator implements Comparator<Edge> {
+        public int compare(Edge a, Edge b) {
+            return a.weight - b.weight; // Compare edges based on their weight
+        }
+    }
+
+    // Main function to construct the Minimum Spanning Tree (MST) using Kruskal's algorithm
+    public static void KruskalMST(Graph graph) {
+        int V = graph.V; // Number of vertices
+        Edge[] result = new Edge[V]; // Array to store the resultant MST
+        int e = 0; // Index for result[]
+        int i = 0; // Index for sorted edges
+
+        // Step 1: Sort all the edges in non-decreasing order of their weight
+        Arrays.sort(graph.edge, new EdgeComparator());
+
+        // Create V subsets for union-find
+        Subset[] subsets = new Subset[V];
+        for (int v = 0; v < V; ++v) {
+            subsets[v] = new Subset(v, 0); // Initialize each subset with parent as itself
+        }
+
+        // Step 2: Pick the smallest edge and increment the index for next iteration
+        while (e < V - 1 && i < graph.E) {
+            // Pick the smallest edge
+            Edge nextEdge = graph.edge[i++];
+            int x = find(subsets, nextEdge.src); // Find the root of the source vertex
+            int y = find(subsets, nextEdge.dest); // Find the root of the destination vertex
+
+            // If including this edge does not form a cycle, include it in the result
+            if (x != y) {
+                result[e++] = nextEdge; // Add the edge to the result array
+                union(subsets, x, y); // Perform union of the two subsets
+            }
+        }
+
+        // Print the resulting MST
+        System.out.println("Following are the edges in the constructed MST:");
+        int minimumCost = 0;
+        for (i = 0; i < e; ++i) {
+            // Print each edge in the MST
+            System.out.println(result[i].src + " -- " + result[i].dest + " == " + result[i].weight);
+            minimumCost += result[i].weight; // Add the weight of the edge to the total cost
+        }
+
+        // Print the total minimum cost of the MST
+        System.out.println("Minimum Cost Spanning Tree: " + minimumCost);
+    }
+
+    // Main method to run the Kruskal's algorithm
+    public static void main(String[] args) {
+        int V = 6; // Number of vertices in the graph
+        int E = 8; // Number of edges in the graph
+        Graph g = new Graph(V, E); // Create a new graph with 6 vertices and 8 edges
+
+        // Add edges to the graph (source, destination, weight)
+        g.edge[0] = new Edge(0, 1, 4);
+        g.edge[1] = new Edge(0, 5, 2);
+        g.edge[2] = new Edge(1, 2, 6);
+        g.edge[3] = new Edge(2, 3, 3);
+        g.edge[4] = new Edge(3, 4, 2);
+        g.edge[5] = new Edge(4, 5, 4);
+        g.edge[6] = new Edge(5, 1, 5);
+        g.edge[7] = new Edge(5, 2, 1);
+
+        // Function call to find the MST using Kruskal's algorithm
+        KruskalMST(g);
+    }
+}
