@@ -1,149 +1,144 @@
-
-
 import java.util.Scanner;
 
-//Node class represents each node in the Binary Search Tree (BST)
+// Node class represents each node in the binary search tree
 class Node {
- int key; // The data of the node
- Node left, right; // Left and right children of the node
-
- // Constructor to initialize a new node with a given key
- public Node(int key) {
-     this.key = key;
-     this.left = null; // Initially, no left child
-     this.right = null; // Initially, no right child
- }
+    int key; // Field to store node data (key)
+    Node left, right; // Left and right child pointers
+    
+    // Constructor to initialize a node with a given key
+    public Node(int key) {
+        this.key = key; // Set the node's key
+        this.left = null; // Initially, the left child is null
+        this.right = null; // Initially, the right child is null
+    }
 }
 
-//BinarySearchTree class represents the Binary Search Tree data structure
+// BinarySearchTree class contains the methods for operations on the BST
 class BinarySearchTree {
- Node root; // The root of the BST
+    Node root; // Root of the BST
+    
+    // Constructor initializes the tree with an empty root
+    BinarySearchTree() {
+        root = null; // Initially, the tree is empty
+    }
 
- // Constructor to initialize the BST
- BinarySearchTree() {
-     root = null; // Initially, the tree is empty
- }
+    // Insert method to insert a new key in the BST
+    void insert(int key) {
+        root = insertRec(root, key); // Call the recursive insert function
+    }
 
- // Public insert method to insert a key into the BST
- void insert(int key) {
-     root = insertRec(root, key); // Call the recursive insert method
- }
+    // Recursive method to insert a new key in the tree
+    Node insertRec(Node root, int key) {
+        if (root == null) {
+            root = new Node(key); // If the root is null, create a new node with the key
+            return root; // Return the newly created node
+        }
 
- // Recursive method to insert a new node in the BST
- Node insertRec(Node root, int key) {
-     // If the tree or subtree is empty, create a new node
-     if (root == null) {
-         root = new Node(key);
-         return root;
-     }
+        // If the key is less than the root's key, insert it in the left subtree
+        if (key < root.key) {
+            root.left = insertRec(root.left, key); // Recursively insert in the left subtree
+        }
+        // If the key is greater than the root's key, insert it in the right subtree
+        else if (key > root.key) {
+            root.right = insertRec(root.right, key); // Recursively insert in the right subtree
+        }
 
-     // If the key is smaller than the root's key, insert it in the left subtree
-     if (key < root.key) {
-         root.left = insertRec(root.left, key);
-     }
-     // If the key is greater than the root's key, insert it in the right subtree
-     else if (key > root.key) {
-         root.right = insertRec(root.right, key);
-     }
-     // Return the root to maintain the structure of the tree
-     return root;
- }
+        return root; // Return the unchanged node pointer (root of the subtree)
+    }
 
- // Public method to start inorder traversal
- void inorder() {
-     inorderRec(root); // Call the recursive inorder method
- }
+    // Inorder traversal of the binary search tree (left, root, right)
+    void inorder() {
+        inorderRec(root); // Call the recursive inorder function
+    }
 
- // Recursive method for inorder traversal
- void inorderRec(Node root) {
-     if (root != null) {
-         inorderRec(root.left); // Traverse the left subtree
-         System.out.print(root.key + " "); // Visit the node
-         inorderRec(root.right); // Traverse the right subtree
-     }
- }
+    // Helper function for inorder traversal
+    void inorderRec(Node root) {
+        if (root != null) {
+            inorderRec(root.left); // Traverse the left subtree
+            System.out.print(root.key + " "); // Print the root node's key
+            inorderRec(root.right); // Traverse the right subtree
+        }
+    }
 
- // Public method to start preorder traversal
- void preorder() {
-     preorderRec(root); // Call the recursive preorder method
- }
+    // Preorder traversal of the binary search tree (root, left, right)
+    void preorder() {
+        preorderRec(root); // Call the recursive preorder function
+    }
 
- // Recursive method for preorder traversal
- void preorderRec(Node root) {
-     if (root != null) {
-         System.out.print(root.key + " "); // Visit the node
-         preorderRec(root.left); // Traverse the left subtree
-         preorderRec(root.right); // Traverse the right subtree
-     }
- }
+    // Helper function for preorder traversal
+    void preorderRec(Node root) {
+        if (root != null) {
+            System.out.print(root.key + " "); // Print the root node's key
+            preorderRec(root.left); // Traverse the left subtree
+            preorderRec(root.right); // Traverse the right subtree
+        }
+    }
 
- // Public method to start postorder traversal
- void postorder() {
-     postorderRec(root); // Call the recursive postorder method
- }
+    // Postorder traversal of the binary search tree (left, right, root)
+    void postorder() {
+        postorderRec(root); // Call the recursive postorder function
+    }
 
- // Recursive method for postorder traversal
- void postorderRec(Node root) {
-     if (root != null) {
-         postorderRec(root.left); // Traverse the left subtree
-         postorderRec(root.right); // Traverse the right subtree
-         System.out.print(root.key + " "); // Visit the node
-     }
- }
+    // Helper function for postorder traversal
+    void postorderRec(Node root) {
+        if (root != null) {
+            postorderRec(root.left); // Traverse the left subtree
+            postorderRec(root.right); // Traverse the right subtree
+            System.out.print(root.key + " "); // Print the root node's key
+        }
+    }
 }
 
-//Main class to interact with the user
+// Main class to interact with the user and perform operations on the BST
 public class Main {
- public static void main(String[] args) {
-     BinarySearchTree bst = new BinarySearchTree(); // Create a new Binary Search Tree
-     Scanner scanner = new Scanner(System.in); // Scanner for user input
+    public static void main(String[] args) {
+        BinarySearchTree bst = new BinarySearchTree(); // Create a new BST
+        Scanner scanner = new Scanner(System.in); // Scanner object to read user input
+        
+        System.out.println("Binary Search Tree Implementation");
+        System.out.println("Enter numbers to insert into the BST (enter -1 to stop):");
 
+        // Continuously ask the user for numbers to insert into the BST
+        while (true) {
+            int key = scanner.nextInt(); // Read a number from the user
+            if (key == -1) break; // Exit the loop when user enters -1
+            bst.insert(key); // Insert the entered number into the BST
+        }
 
-     System.out.println("\nBinary Search Tree Implementation");
-     System.out.println("Enter numbers to insert into the BST (enter -1 to stop):");
+        // Display a menu for the user to choose the traversal method
+        while (true) {
+            System.out.println("\nChoose a traversal method:");
+            System.out.println("1. Inorder");
+            System.out.println("2. Preorder");
+            System.out.println("3. Postorder");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt(); // Read user's choice for traversal
 
-     // Loop to insert keys into the BST until -1 is entered
-     while (true) {
-         int key = scanner.nextInt(); // Read user input
-         if (key == -1) break; // Stop when user enters -1
-         bst.insert(key); // Insert the key into the BST
-     }
-
-     // Menu for traversals, continuously ask the user for a traversal method
-     while (true) {
-         System.out.println("\nChoose a traversal method:");
-         System.out.println("1. Inorder");
-         System.out.println("2. Preorder");
-         System.out.println("3. Postorder");
-         System.out.println("4. Exit");
-         System.out.print("Enter your choice: ");
-         
-         int choice = scanner.nextInt(); // Read user's choice
-         
-         // Perform the corresponding traversal based on user's choice
-         switch (choice) {
-             case 1:
-                 System.out.println("Inorder Traversal:");
-                 bst.inorder(); // Call inorder traversal method
-                 System.out.println();
-                 break;
-             case 2:
-                 System.out.println("Preorder Traversal:");
-                 bst.preorder(); // Call preorder traversal method
-                 System.out.println();
-                 break;
-             case 3:
-                 System.out.println("Postorder Traversal:");
-                 bst.postorder(); // Call postorder traversal method
-                 System.out.println();
-                 break;
-             case 4:
-                 System.out.println("Exiting program.");
-                 scanner.close(); // Close the scanner and exit
-                 return;
-             default:
-                 System.out.println("Invalid choice! Please try again.");
-         }
-     }
- }
+            switch (choice) {
+                case 1: // Inorder traversal
+                    System.out.println("Inorder Traversal:");
+                    bst.inorder(); // Print the inorder traversal
+                    System.out.println(); // Print a new line after traversal
+                    break;
+                case 2: // Preorder traversal
+                    System.out.println("Preorder Traversal:");
+                    bst.preorder(); // Print the preorder traversal
+                    System.out.println(); // Print a new line after traversal
+                    break;
+                case 3: // Postorder traversal
+                    System.out.println("Postorder Traversal:");
+                    bst.postorder(); // Print the postorder traversal
+                    System.out.println(); // Print a new line after traversal
+                    break;
+                case 4: // Exit the program
+                    System.out.println("Exiting program.");
+                    scanner.close(); // Close the scanner to free up resources
+                    return; // Exit the program
+                default:
+                    // If the user enters an invalid choice
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        }
+    }
 }
