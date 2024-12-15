@@ -1,167 +1,167 @@
 //13 a QueueusingLinkedList
-//Class to implement a queue using a linked list
+import java.util.Scanner;
 class QueueusingLinkedList {
- // Node class represents each element of the queue
- static class Node {
-     int data;  // Data to store the value of the node
-     Node next; // Pointer to the next node in the queue
+	 // Node class represents each element of the queue
+	 static class Node {
+	     int data;  // Data to store the value of the node
+	     Node next; // Pointer to the next node in the queue
 
-     // Constructor to create a new node
-     public Node(int data) {
-         this.data = data;  // Set the data of the node
-         this.next = null;   // Initially, the next pointer is null because it's the only node
-     }
- }
+	     // Constructor to create a new node
+	     public Node(int data) {
+	         this.data = data;  // Set the data of the node
+	         this.next = null;   // Initially, the next pointer is null because it's the only node
+	     }
+	 }
 
- // Queue class containing methods to perform operations on the queue
- static class Queue {
-     Node front, rear;  // Front and rear pointers to manage the queue
+	 // Queue class containing methods to perform operations on the queue
+	 static class Queue {
+	     Node front, rear;  // Front and rear pointers to manage the queue
 
-     // Constructor to initialize the queue
-     public Queue() {
-         front = rear = null;  // Initially, both front and rear are null, indicating the queue is empty
-     }
+	     // Constructor to initialize the queue
+	     public Queue() {
+	         front = rear = null;  // Initially, both front and rear are null, indicating the queue is empty
+	     }
 
-     // Enqueue method to add an element to the queue
-     public void enqueue(int data) {
-         Node newNode = new Node(data);  // Create a new node with the provided data
+	     // Enqueue method to add an element to the queue
+	     public void enqueue(int data) {
+	         Node newNode = new Node(data);  // Create a new node with the provided data
 
-         // If the queue is empty (rear is null), the new node becomes both front and rear
-         if (rear == null) {
-             front = rear = newNode;  
-             System.out.println(data + " enqueued to the queue.");
-             return;  // Exit the method as the queue was empty and the new node is now the only element
-         }
+	         // If the queue is empty (rear is null), the new node becomes both front and rear
+	         if (rear == null) {
+	             front = rear = newNode;  
+	             System.out.println(data + " enqueued to the queue.");
+	             return;  // Exit the method as the queue was empty and the new node is now the only element
+	         }
 
-         // If the queue is not empty, add the new node at the end of the queue (rear)
-         rear.next = newNode;  // The current rear's next points to the new node
-         rear = newNode;       // Update the rear to the new node (it becomes the last element)
-         System.out.println(data + " enqueued to the queue.");
-     }
+	         // If the queue is not empty, add the new node at the end of the queue (rear)
+	         rear.next = newNode;  // The current rear's next points to the new node
+	         rear = newNode;       // Update the rear to the new node (it becomes the last element)
+	         System.out.println(data + " enqueued to the queue.");
+	     }
 
-     // Dequeue method to remove the front element from the queue
-     public int dequeue() {
-         // Check if the queue is empty
-         if (front == null) {
-             System.out.println("Queue is empty, cannot dequeue.");
-             return -1;  // Return -1 to indicate that the dequeue operation couldn't be performed
-         }
+	     // Dequeue method to remove the front element from the queue
+	     public int dequeue() {
+	         // Check if the queue is empty
+	         if (front == null) {
+	             System.out.println("Queue is empty, cannot dequeue.");
+	             return -1;  // Return -1 to indicate that the dequeue operation couldn't be performed
+	         }
 
-         // Get the value of the front node to return
-         int dequeuedValue = front.data;
-         front = front.next;  // Move the front pointer to the next node in the queue
+	         // Get the value of the front node to return
+	         int dequeuedValue = front.data;
+	         front = front.next;  // Move the front pointer to the next node in the queue
 
-         // If the front is null (queue becomes empty after dequeue), reset rear to null
-         if (front == null) {
-             rear = null;  // If the queue is empty, reset the rear as well
-         }
+	         // If the front is null (queue becomes empty after dequeue), reset rear to null
+	         if (front == null) {
+	             rear = null;  // If the queue is empty, reset the rear as well
+	         }
 
-         return dequeuedValue;  // Return the value of the dequeued element
-     }
+	         return dequeuedValue;  // Return the value of the dequeued element
+	     }
 
-     // Peek method to view the front element without removing it
-     public int peek() {
-         // Check if the queue is empty
-         if (front == null) {
-             System.out.println("Queue is empty, cannot peek.");
-             return -1;  // Return -1 if the queue is empty
-         }
-         return front.data;  // Return the data of the front node
-     }
+	     // Peek method to view the front element without removing it
+	     public int peek() {
+	         // Check if the queue is empty
+	         if (front == null) {
+	             System.out.println("Queue is empty, cannot peek.");
+	             return -1;  // Return -1 if the queue is empty
+	         }
+	         return front.data;  // Return the data of the front node
+	     }
 
-     // Method to check if the queue is empty
-     public boolean isEmpty() {
-         return front == null;  // If front is null, the queue is empty
-     }
+	     // Method to check if the queue is empty
+	     public boolean isEmpty() {
+	         return front == null;  // If front is null, the queue is empty
+	     }
 
-     // Method to display all elements in the queue
-     public void display() {
-         // If the queue is empty, print a message
-         if (front == null) {
-             System.out.println("Queue is empty.");
-             return;
-         }
+	     // Method to display all elements in the queue
+	     public void display() {
+	         // If the queue is empty, print a message
+	         if (front == null) {
+	             System.out.println("Queue is empty.");
+	             return;
+	         }
 
-         // Traverse the queue starting from the front
-         Node temp = front;  // Temporary pointer to traverse the queue
-         System.out.print("Queue: ");
-         while (temp != null) {  // Traverse through all nodes
-             System.out.print(temp.data + " ");  // Print the data of the current node
-             temp = temp.next;  // Move to the next node
-         }
-         System.out.println();  // Print a newline after displaying all elements
-     }
- }
+	         // Traverse the queue starting from the front
+	         Node temp = front;  // Temporary pointer to traverse the queue
+	         System.out.print("Queue: ");
+	         while (temp != null) {  // Traverse through all nodes
+	             System.out.print(temp.data + " ");  // Print the data of the current node
+	             temp = temp.next;  // Move to the next node
+	         }
+	         System.out.println();  // Print a newline after displaying all elements
+	     }
+	 }
 
- // Main method that contains the menu-driven user interface
- public static void main(String[] args) {
-     Scanner scanner = new Scanner(System.in);  // Scanner object to take user input
-     Queue queue = new Queue();  // Create a new queue instance
-     int choice;  // Variable to store user's menu choice
+	 // Main method that contains the menu-driven user interface
+	 public static void main(String[] args) {
+	     Scanner scanner = new Scanner(System.in);  // Scanner object to take user input
+	     Queue queue = new Queue();  // Create a new queue instance
+	     int choice;  // Variable to store user's menu choice
 
-     // Infinite loop to continuously display the menu until the user chooses to exit
-     while (true) {
-         // Display the menu to the user
-         System.out.println("\n*** Queue Operations ***");
-         System.out.println("1. Enqueue");
-         System.out.println("2. Dequeue");
-         System.out.println("3. Peek");
-         System.out.println("4. Display");
-         System.out.println("5. Check if Empty");
-         System.out.println("6. Exit");
-         System.out.print("Enter your choice: ");
-         choice = scanner.nextInt();  // Read the user's choice
+	     // Infinite loop to continuously display the menu until the user chooses to exit
+	     while (true) {
+	         // Display the menu to the user
+	         System.out.println("\n*** Queue Operations ***");
+	         System.out.println("1. Enqueue");
+	         System.out.println("2. Dequeue");
+	         System.out.println("3. Peek");
+	         System.out.println("4. Display");
+	         System.out.println("5. Check if Empty");
+	         System.out.println("6. Exit");
+	         System.out.print("Enter your choice: ");
+	         choice = scanner.nextInt();  // Read the user's choice
 
-         // Perform the corresponding operation based on the user's choice
-         switch (choice) {
-             case 1:  // Enqueue operation
-                 // Ask the user to enter a value to enqueue
-                 System.out.print("Enter value to enqueue: ");
-                 int enqueueValue = scanner.nextInt();  // Read the value to enqueue
-                 queue.enqueue(enqueueValue);  // Enqueue the value
-                 break;
+	         // Perform the corresponding operation based on the user's choice
+	         switch (choice) {
+	             case 1:  // Enqueue operation
+	                 // Ask the user to enter a value to enqueue
+	                 System.out.print("Enter value to enqueue: ");
+	                 int enqueueValue = scanner.nextInt();  // Read the value to enqueue
+	                 queue.enqueue(enqueueValue);  // Enqueue the value
+	                 break;
 
-             case 2:  // Dequeue operation
-                 // Call the dequeue method to remove the front element
-                 int dequeuedValue = queue.dequeue();
-                 if (dequeuedValue != -1) {  // If the queue was not empty, display the dequeued value
-                     System.out.println("Dequeued value: " + dequeuedValue);
-                 }
-                 break;
+	             case 2:  // Dequeue operation
+	                 // Call the dequeue method to remove the front element
+	                 int dequeuedValue = queue.dequeue();
+	                 if (dequeuedValue != -1) {  // If the queue was not empty, display the dequeued value
+	                     System.out.println("Dequeued value: " + dequeuedValue);
+	                 }
+	                 break;
 
-             case 3:  // Peek operation
-                 // Call the peek method to view the front element without removing it
-                 int frontValue = queue.peek();
-                 if (frontValue != -1) {  // If the queue is not empty, display the front value
-                     System.out.println("Front value: " + frontValue);
-                 }
-                 break;
+	             case 3:  // Peek operation
+	                 // Call the peek method to view the front element without removing it
+	                 int frontValue = queue.peek();
+	                 if (frontValue != -1) {  // If the queue is not empty, display the front value
+	                     System.out.println("Front value: " + frontValue);
+	                 }
+	                 break;
 
-             case 4:  // Display queue operation
-                 // Call the display method to show all the elements in the queue
-                 queue.display();
-                 break;
+	             case 4:  // Display queue operation
+	                 // Call the display method to show all the elements in the queue
+	                 queue.display();
+	                 break;
 
-             case 5:  // Check if the queue is empty
-                 // Call the isEmpty method to check if the queue is empty
-                 if (queue.isEmpty()) {
-                     System.out.println("Queue is empty.");  // If the queue is empty
-                 } else {
-                     System.out.println("Queue is not empty.");  // If the queue is not empty
-                 }
-                 break;
+	             case 5:  // Check if the queue is empty
+	                 // Call the isEmpty method to check if the queue is empty
+	                 if (queue.isEmpty()) {
+	                     System.out.println("Queue is empty.");  // If the queue is empty
+	                 } else {
+	                     System.out.println("Queue is not empty.");  // If the queue is not empty
+	                 }
+	                 break;
 
-             case 6:  // Exit operation
-                 System.out.println("Exiting...");  // Print an exit message
-                 scanner.close();  // Close the scanner to free up resources
-                 return;  // Exit the program
+	             case 6:  // Exit operation
+	                 System.out.println("Exiting...");  // Print an exit message
+	                 scanner.close();  // Close the scanner to free up resources
+	                 return;  // Exit the program
 
-             default:  // Invalid choice
-                 System.out.println("Invalid choice, please try again.");  // Print an error message
-         }
-     }
- }
-}
+	             default:  // Invalid choice
+	                 System.out.println("Invalid choice, please try again.");  // Print an error message
+	         }
+	     }
+	 }
+	}
 
 //prct 13 b 
 
