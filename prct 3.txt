@@ -157,7 +157,7 @@ public class DigitExtraction {
     }
 }
 
-// prct 3 b 
+// prct 3 c 
 import java.util.Scanner;  // Import the Scanner class to read user input
 
 public class FoldBoundary {
