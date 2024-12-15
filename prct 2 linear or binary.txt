@@ -1,69 +1,53 @@
 //prct 2 a linear search
 
-import java.util.Scanner;  // Import the Scanner class to read user input
+import java.util.Scanner;
 
-public class BinarySearch {
+public class LinearSearch {
+    public static void main(String args[]) {
+        // Declare variables
+        int counter, num, item, array[];
 
-    // Binary Search method
-    public static int binarySearch(int[] array, int target) {
-        int left = 0;  // Initialize the left boundary
-        int right = array.length - 1;  // Initialize the right boundary
+        // To capture user input
+        Scanner input = new Scanner(System.in);
 
-        while (left <= right) {  // Loop while left boundary is less than or equal to right boundary
-            int mid = left + (right - left) / 2;  // Calculate the middle index to avoid overflow
+        // Ask the user to input the number of elements they want to enter
+        System.out.println("Enter number of elements:");
+        num = input.nextInt();  // Capture the number of elements
 
-            if (array[mid] == target) {
-                return mid;  // Return the index if the target is found
+        // Create an array to store the numbers based on user input
+        array = new int[num];
+
+        // Ask the user to enter the integers they want to store in the array
+        System.out.println("Enter " + num + " integers");
+
+        // Loop to store each number entered by the user into the array
+        for (counter = 0; counter < num; counter++) {
+            array[counter] = input.nextInt();  // Store each number in the array
+        }
+
+        // Ask the user to input the value they want to search for
+        System.out.println("Enter the search value:");
+        item = input.nextInt();  // Capture the search value
+
+        // Perform the linear search
+        for (counter = 0; counter < num; counter++) {
+            if (array[counter] == item) {  // Check if the item matches the array element
+                // If found, print the index of the element
+                System.out.println(item + " is present at location " + (counter));
+                /* Item is found, so break out of the loop to stop further searching */
+                break;
             }
-
-            if (array[mid] < target) {
-                left = mid + 1;  // If target is greater, ignore the left half
-            } else {
-                right = mid - 1;  // If target is smaller, ignore the right half
-            }
         }
 
-        return -1;  // Return -1 if the element is not found
-    }
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);  // Create Scanner object to read input
-
-        // Ask the user to enter the number of elements in the array
-        System.out.print("Enter the number of elements in the array: ");
-        int size = scanner.nextInt();  // Read the size of the array
-
-        if (size <= 0) {
-            System.out.println("Array size must be a positive integer.");
-            return; // Exit if the size is non-positive
+        // If the counter reaches the number of elements, the item was not found
+        if (counter == num) {
+            // Print that the item is not found
+            System.out.println(item + " doesn't exist in array.");
         }
 
-        int[] array = new int[size];  // Create an array of the given size
-
-        // Ask the user to input the sorted integers
-        System.out.println("Enter " + size + " sorted integers:");
-        for (int i = 0; i < size; i++) {
-            array[i] = scanner.nextInt();  // Read each integer into the array
-        }
-
-        // Ask the user to input the target value to search
-        System.out.print("Enter the element to search: ");
-        int target = scanner.nextInt();  // Read the target element
-
-        // Perform binary search and get the result
-        int result = binarySearch(array, target);
-
-        // Output the result
-        if (result == -1) {
-            System.out.println("Element not found");
-        } else {
-            System.out.println("Element found at index " + result);  // Print the index of the target
-        }
-
-        scanner.close();  // Close the scanner
+        input.close();  // Close the scanner to prevent resource leak
     }
 }
-
 
 // prct 2 b
 
