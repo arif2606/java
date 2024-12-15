@@ -49,15 +49,15 @@ public class LinearSearch {
     }
 }
 
-// prct 2 b
+// prct 2 binary 
 
 
-import java.util.Scanner;  // Import the Scanner class to read user input
+import java.util.Scanner;
 
 public class BinarySearch {
 
-    // Binary Search method
-    public static int binarySearch(int[] array, int target) {
+    // Binary Search method for ascending or descending order
+    public static int binarySearch(int[] array, int target, boolean isAscending) {
         int left = 0;  // Initialize the left boundary
         int right = array.length - 1;  // Initialize the right boundary
 
@@ -68,16 +68,27 @@ public class BinarySearch {
                 return mid;  // Return the index if the target is found
             }
 
-            if (array[mid] < target) {
-                left = mid + 1;  // If target is greater, ignore the left half
+            if (isAscending) {
+                // If the array is sorted in ascending order
+                if (array[mid] < target) {
+                    left = mid + 1;  // If target is greater, ignore the left half
+                } else {
+                    right = mid - 1;  // If target is smaller, ignore the right half
+                }
             } else {
-                right = mid - 1;  // If target is smaller, ignore the right half
+                // If the array is sorted in descending order
+                if (array[mid] > target) {
+                    left = mid + 1;  // If target is greater, ignore the right half
+                } else {
+                    right = mid - 1;  // If target is smaller, ignore the left half
+                }
             }
         }
 
         return -1;  // Return -1 if the element is not found
     }
 
+    // Main method to get user input
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);  // Create Scanner object to read input
 
@@ -92,10 +103,19 @@ public class BinarySearch {
 
         int[] array = new int[size];  // Create an array of the given size
 
-        // Ask the user to input the sorted integers
-        System.out.println("Enter " + size + " sorted integers:");
+        // Ask the user to input the integers
+        System.out.println("Enter " + size + " integers:");
         for (int i = 0; i < size; i++) {
             array[i] = scanner.nextInt();  // Read each integer into the array
+        }
+
+        // Determine if the array is sorted in ascending or descending order
+        boolean isAscending = true;
+        for (int i = 1; i < size; i++) {
+            if (array[i] < array[i - 1]) {
+                isAscending = false;  // The array is sorted in descending order
+                break;
+            }
         }
 
         // Ask the user to input the target value to search
@@ -103,7 +123,7 @@ public class BinarySearch {
         int target = scanner.nextInt();  // Read the target element
 
         // Perform binary search and get the result
-        int result = binarySearch(array, target);
+        int result = binarySearch(array, target, isAscending);
 
         // Output the result
         if (result == -1) {
